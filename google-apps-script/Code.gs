@@ -2,19 +2,49 @@
 // CẤU HÌNH BAN ĐẦU - BẠN CHỈ CẦN CHẠY HÀM setupProperties() 1 LẦN DUY NHẤT ĐỂ LƯU.
 // =====================================================================================
 
+function normalizeDriveFolderId(value) {
+  var raw = String(value || "").trim();
+  if (!raw || raw.indexOf("THAY_BẰNG") !== -1) {
+    throw new Error("DRIVE_FOLDER_ID chưa được cấu hình. Hãy lưu ID thư mục BCNS_BILLS trong Script Properties.");
+  }
+
+  var match = raw.match(/\/folders\/([a-zA-Z0-9_-]+)/);
+  if (match) return match[1];
+
+  match = raw.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+  if (match) return match[1];
+
+  if (!/^[a-zA-Z0-9_-]{10,}$/.test(raw)) {
+    throw new Error("DRIVE_FOLDER_ID không hợp lệ: " + raw);
+  }
+  return raw;
+}
+
+/**
+ * Chạy thủ công hàm này một lần trong Apps Script Editor.
+ * Hàm vừa yêu cầu quyền OAuth, vừa kiểm tra đúng thư mục đích.
+ */
 function KICH_HOAT_QUYEN_DRIVE() {
-  // Hàm này ép Google hiện bảng cấp quyền GHI DỮ LIỆU (Full Drive Access)
-  var f = DriveApp.getRootFolder();
-  var b = Utilities.newBlob("test", "text/plain", "test.txt");
-  f.createFile(b);
-  Logger.log("CHÚC MỪNG! BẠN ĐÃ CẤP QUYỀN DRIVE THÀNH CÔNG.");
+  var conf = getConfig();
+  var folderId = normalizeDriveFolderId(conf.DRIVE_FOLDER_ID);
+  var folder = DriveApp.getFolderById(folderId);
+  var testFile = folder.createFile(
+    Utilities.newBlob("BCNS permission test", "text/plain", "bcns-drive-test.txt")
+  );
+  testFile.setTrashed(true);
+  Logger.log("Đã cấp quyền Drive và ghi thử thành công vào: " + folder.getName());
+  return "OK";
 }
 
 function setupProperties() {
   var props = PropertiesService.getScriptProperties();
+  var currentFolderId = props.getProperty("DRIVE_FOLDER_ID");
+  var active = SpreadsheetApp.getActiveSpreadsheet();
+
   props.setProperties({
-    'SPREADSHEET_ID': SpreadsheetApp.getActiveSpreadsheet().getId(), // Tự động lấy ID của file hiện tại
-    'DRIVE_FOLDER_ID': 'THAY_BẰNG_ID_THƯ_MỤC_DRIVE_CỦA_BẠN', // VD: 1A2b3C4d5E6f7G8h...
+    'SPREADSHEET_ID': active ? active.getId() : (props.getProperty("SPREADSHEET_ID") || ""),
+    // Không ghi đè ID thật nếu bạn chạy setupProperties() lại.
+    'DRIVE_FOLDER_ID': currentFolderId || 'THAY_BẰNG_ID_THƯ_MỤC_DRIVE_CỦA_BẠN',
     'SUPPORT_EMAIL': 'buocchaynhipsonggg@gmail.com',
     'FACEBOOK_URL': 'https://facebook.com/buocchaynhipsong',
     'LOGO_URL': 'https://via.placeholder.com/150x50.png?text=LOGO+BCNS',
@@ -22,12 +52,23 @@ function setupProperties() {
     'EVENT_NAME': 'BƯỚC CHẠY NHỊP SỐNG 2026',
     'LOCATION': '2782+CMW, Trần Văn Đán, Ngũ Hành Sơn, Đà Nẵng'
   });
-  Logger.log("Đã lưu Properties thành công!");
+  Logger.log("Đã lưu Properties. Hãy kiểm tra DRIVE_FOLDER_ID rồi chạy KICH_HOAT_QUYEN_DRIVE().");
 }
 
-// Hàm hỗ trợ lấy config
 function getConfig() {
   return PropertiesService.getScriptProperties().getProperties();
+}
+
+function getDriveAccessHelp_(error) {
+  return [
+    "DriveApp bị từ chối quyền.",
+    "Mở Apps Script bằng đúng tài khoản sở hữu thư mục;",
+    "chạy KICH_HOAT_QUYEN_DRIVE() trong Editor và bấm Cho phép;",
+    "sau đó Deploy > Manage deployments > Edit > New version;",
+    "Execute as phải là Me và Who has access là Anyone;",
+    "tài khoản chạy script phải có quyền Editor với thư mục.",
+    "Chi tiết: " + error
+  ].join(" ");
 }
 
 // =====================================================================================
@@ -78,48 +119,36 @@ function submitFullRegistration(data) {
       return { success: false, message: "Thiếu thông tin bắt buộc hoặc ảnh hóa đơn." };
     }
     
-    // Xử lý ID thư mục
-    var rawFolderId = conf.DRIVE_FOLDER_ID.trim();
-    var folderId = rawFolderId;
-    if (rawFolderId.indexOf('folders/') !== -1) {
-      folderId = rawFolderId.split('folders/')[1].split('?')[0].split('/')[0];
-    } else if (rawFolderId.indexOf('id=') !== -1) {
-      folderId = rawFolderId.split('id=')[1].split('&')[0];
-    }
-    
+    var folderId = normalizeDriveFolderId(conf.DRIVE_FOLDER_ID);
     var timeStr = Utilities.formatDate(new Date(), "GMT+7", "yyyyMMdd-HHmmss");
-    var safeName = String(data.fullname).replace(/[^a-zA-Z0-9 ]/g, "").replace(/\s+/g, "-").toUpperCase();
-    var finalFileName = data.code + "_" + safeName + "_" + timeStr + ".jpg";
-    var blob = Utilities.newBlob(Utilities.base64Decode(data.fileData), data.mimeType || "image/jpeg", finalFileName);
-    
+    var safeName = String(data.fullname || "RUNNER")
+      .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+      .replace(/[^a-zA-Z0-9 ]/g, "")
+      .replace(/\s+/g, "-")
+      .toUpperCase();
+    var mimeType = data.mimeType || "image/jpeg";
+    var extension = mimeType === "image/png" ? ".png" :
+                    mimeType === "image/webp" ? ".webp" : ".jpg";
+    var finalFileName = data.code + "_" + safeName + "_" + timeStr + extension;
+    var blob = Utilities.newBlob(
+      Utilities.base64Decode(data.fileData),
+      mimeType,
+      finalFileName
+    );
+
+    var folder;
     var file;
-    var fileId = "";
-    var imageFormula = "";
-    
     try {
-      // Thử lấy thư mục và tạo file
-      var folder = DriveApp.getFolderById(folderId);
+      folder = DriveApp.getFolderById(folderId);
       file = folder.createFile(blob);
-    } catch(e1) {
-      // Nếu lỗi, thử tạo file ở thư mục Gốc của Drive
-      try {
-        file = DriveApp.createFile(blob);
-      } catch(e2) {
-        throw new Error("Lỗi lưu Drive: " + e1.toString() + " | Lỗi lưu Root: " + e2.toString());
-      }
+    } catch (driveError) {
+      throw new Error(getDriveAccessHelp_(driveError.toString()));
     }
-    
-    if (file) {
-      fileId = file.getId();
-      try {
-        file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
-      } catch(e3) {
-        // Bỏ qua lỗi setSharing
-      }
-      var directUrl = "https://drive.google.com/uc?export=view&id=" + fileId;
-      imageFormula = '=IMAGE("' + directUrl + '")';
-    }
-    
+
+    // Giữ bill ở chế độ riêng tư. Ảnh xem trước sẽ được chèn trực tiếp vào Sheet.
+    var fileId = file.getId();
+    var imageFormula = "";
+
     var newRow = [
       timestamp, data.code, data.fullname, data.dob, data.gender, data.phone, data.email, data.address,
       data.distance, data.size, data.emergencyName, data.emergencyPhone, data.fee || 0,
@@ -128,7 +157,21 @@ function submitFullRegistration(data) {
     ];
     
     sheet.appendRow(newRow);
-    return { success: true, code: data.code, message: "Tải lên thành công" };
+    var appendedRow = sheet.getLastRow();
+
+    // Hiển thị bill ngay trên Sheet mà không công khai file Drive.
+    sheet.setRowHeight(appendedRow, 130);
+    sheet.setColumnWidth(16, 200);
+    var preview = sheet.insertImage(blob, 16, appendedRow);
+    preview.setWidth(180).setHeight(120);
+    SpreadsheetApp.flush();
+
+    return {
+      success: true,
+      code: data.code,
+      fileId: fileId,
+      message: "Tải lên thành công"
+    };
     
   } catch (err) {
     // Trả về DÒNG LỖI chính xác để debug

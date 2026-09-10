@@ -1,3 +1,26 @@
+# Sửa lỗi `Truy cập bị từ chối: DriveApp`
+
+Bản hiện tại giữ bill ở chế độ **riêng tư** trên Drive và chèn ảnh xem trước trực tiếp vào cột P của Google Sheet. Không cần bật chia sẻ công khai cho hóa đơn.
+
+## Bắt buộc làm lại sau khi cập nhật Code.gs
+
+1. Trong Apps Script, bật **Project Settings → Show "appsscript.json" manifest file in editor**.
+2. Sao chép cả `Code.gs` và `appsscript.json` từ thư mục này vào project Apps Script.
+3. Vào **Project Settings → Script Properties**, đặt:
+   - `DRIVE_FOLDER_ID`: ID của thư mục `BCNS_BILLS`, không phải link giả hoặc chuỗi mẫu.
+   - `SPREADSHEET_ID`: ID Google Sheet.
+4. Thư mục `BCNS_BILLS` phải thuộc tài khoản chạy Apps Script hoặc tài khoản đó phải có quyền **Editor**.
+5. Chọn hàm `KICH_HOAT_QUYEN_DRIVE`, bấm **Run**, chọn đúng tài khoản và bấm **Allow**. Hàm sẽ tạo rồi chuyển một file kiểm tra vào thùng rác.
+6. Chọn **Deploy → Manage deployments → Edit → New version**:
+   - **Execute as:** Me
+   - **Who has access:** Anyone
+7. Bấm **Deploy** và giữ nguyên URL `/exec` hiện có. Nếu Google tạo URL mới thì cập nhật `GOOGLE_SCRIPT_URL` trong `assets/js/config.js`.
+8. Gửi thử một bill nhỏ. Cột O lưu File ID; cột P hiển thị ảnh; menu **BCNS → Mở bill dòng đang chọn** mở file gốc.
+
+> Nếu `KICH_HOAT_QUYEN_DRIVE` vẫn báo từ chối ngay trong Editor, đây là lỗi quyền tài khoản/Google Workspace chứ không phải frontend. Hãy dùng tài khoản sở hữu thư mục hoặc nhờ quản trị viên Workspace bật Google Drive/Apps Script cho tài khoản đó.
+
+---
+
 # Hướng Dẫn Tích Hợp Google Apps Script & Google Drive
 
 Tài liệu này hướng dẫn chi tiết cách thiết lập Backend cho hệ thống tải Hóa Đơn và Quản Lý Trạng Thái (Có duyệt).

@@ -160,16 +160,28 @@ function submitFullRegistration(data) {
     var appendedRow = sheet.getLastRow();
 
     // Hiển thị bill ngay trên Sheet mà không công khai file Drive.
-    sheet.setRowHeight(appendedRow, 130);
-    sheet.setColumnWidth(16, 200);
-    var preview = sheet.insertImage(blob, 16, appendedRow);
-    preview.setWidth(180).setHeight(120);
+    // Nếu chèn preview lỗi, dữ liệu đăng ký vẫn được giữ và cột P có link dự phòng.
+    var previewWarning = "";
+    try {
+      sheet.setRowHeight(appendedRow, 130);
+      sheet.setColumnWidth(16, 200);
+      var preview = sheet.insertImage(blob, 16, appendedRow);
+      preview.setWidth(180).setHeight(120);
+    } catch (previewError) {
+      var privateViewUrl = "https://drive.google.com/file/d/" + fileId + "/view";
+      sheet.getRange(appendedRow, 16).setFormula(
+        '=HYPERLINK("' + privateViewUrl + '","Mở hóa đơn")'
+      );
+      previewWarning = "Bill đã lưu; không chèn được ảnh xem trước.";
+      Logger.log(previewWarning + " " + previewError);
+    }
     SpreadsheetApp.flush();
 
     return {
       success: true,
       code: data.code,
       fileId: fileId,
+      warning: previewWarning,
       message: "Tải lên thành công"
     };
     

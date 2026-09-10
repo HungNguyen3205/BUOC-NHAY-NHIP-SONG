@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BƯỚC CHẠY NHỊP SỐNG - Đăng Ký Giải Chạy</title>
+    <meta name="description" content="Đăng ký tham gia giải chạy cộng đồng BƯỚC CHẠY NHỊP SỐNG tại Đà Nẵng. Bền từng bước - Khỏe từng nhịp.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+    <!-- HEADER -->
+    <header id="header">
+        <div class="container header-container">
+            <div class="logo">
+                <span class="logo-text">BƯỚC CHẠY NHỊP SỐNG</span>
+            </div>
+            <nav class="desktop-nav">
+                <a href="#hero">Giới thiệu</a>
+                <a href="#schedule">Lịch trình</a>
+                <a href="#distance">Cự ly</a>
+                <a href="#safety">Lưu ý</a>
+            </nav>
+            <div class="header-cta">
+                <a href="#register" class="btn btn-primary">Đăng ký ngay</a>
+            </div>
+            <button class="mobile-menu-btn" aria-label="Mở menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+        <div class="mobile-nav">
+            <a href="#hero">Giới thiệu</a>
+            <a href="#schedule">Lịch trình</a>
+            <a href="#distance">Cự ly</a>
+            <a href="#safety">Lưu ý</a>
+            <a href="#register" class="btn btn-primary">Đăng ký ngay</a>
+        </div>
+    </header>
+
+    <!-- HERO SECTION -->
+    <section id="hero" class="hero fade-up">
+        <!-- Nếu bạn có ảnh nền tổng thể (chứa mờ rồng và runner), hãy dùng class hero-bg-image -->
+        <div class="container hero-container-split">
+            <div class="hero-content-left">
+                <h1 class="hero-title-stroke">BƯỚC CHẠY<br>NHỊP SỐNG</h1>
+                <p class="hero-slogan-italic">Bền từng bước - Khỏe từng nhịp</p>
+                <p class="hero-desc dark-text">Sẵn sàng lan tỏa lối sống lành mạnh và nâng cao nhận thức về sức khỏe tim mạch chính thức bắt đầu!! Hứa hẹn mang đến trải nghiệm thể thao sôi động và tạo nên những kỉ niệm đáng nhớ cùng bạn.</p>
+                
+                <div class="hero-info dark-text">
+                    <div class="info-item">
+                        <span class="info-label">Thời gian</span>
+                        <span class="info-value">05:00 – 09:20 | 27/09/2026</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Địa điểm</span>
+                        <span class="info-value">Ngũ Hành Sơn, Đà Nẵng</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Cự ly</span>
+                        <span class="info-value">3KM & 5KM</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Mở đơn</span>
+                        <span class="info-value">06/09/2026 - 16/09/2026</span>
+                    </div>
+                </div>
+
+                <div class="hero-buttons">
+                    <a href="#register" class="btn btn-primary btn-large">Đăng ký tham gia</a>
+                    <a href="#schedule" class="btn btn-secondary btn-large">Xem lịch trình</a>
+                </div>
+            </div>
+            <div class="hero-image-right">
+                <!-- Chèn ảnh khung bên phải của bạn vào đây (hero-banner.png) -->
+                <img src="./images/banner.png" alt="Banner Bước Chạy Nhịp Sống" id="heroRightImage">
+            </div>
+        </div>
+    </section>
+
+    <!-- Ý NGHĨA CHIẾN DỊCH -->
+    <section id="meaning" class="meaning py-section">
+        <div class="container meaning-container fade-up">
+            <div class="editorial-layout">
+                <div class="editorial-line"></div>
+                <h2 class="section-title">Nhịp Đập<br>Cộng Đồng</h2>
+                <p class="editorial-text">
+                    Hệ tim mạch được ví như hệ thống giao thông của cơ thể. Mỗi bước chạy không chỉ rèn luyện sức khỏe mà còn góp phần lan tỏa và kết nối cộng đồng với một lối sống lành mạnh, bền vững.
+                </p>
+                <div class="editorial-dots">
+                    <span></span><span></span><span></span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TRƯNG BÀY VẬT PHẨM & ĐỘI NGŨ -->
+    <section id="showcase" class="showcase py-section">
+        <div class="container fade-up">
+            <h2 class="section-title text-center">Nổi Bật Tại Giải Chạy</h2>
+            <div class="showcase-grid">
+                <!-- Áo chạy -->
+                <div class="showcase-card">
+                    <div class="showcase-image-wrapper">
+                        <img src="images/aochay.jpg" alt="Áo thi đấu chính thức" class="showcase-img">
+                        <div class="showcase-badge">Vật phẩm</div>
+                    </div>
+                    <div class="showcase-content">
+                        <h3>Áo Thi Đấu Chính Thức</h3>
+                        <p>Thiết kế năng động, chất liệu thể thao cao cấp siêu nhẹ và thoáng khí, giúp vận động viên bứt phá mọi giới hạn trên đường chạy.</p>
+                    </div>
+                </div>
+                
+                <!-- Đội ngũ -->
+                <div class="showcase-card">
+                    <div class="showcase-image-wrapper">
+                        <img src="images/doingu.jpg" alt="Đội ngũ ban tổ chức" class="showcase-img">
+                        <div class="showcase-badge team-badge">Đội ngũ</div>
+                    </div>
+                    <div class="showcase-content">
+                        <h3>Đội Ngũ Đồng Hành</h3>
+                        <p>Được tổ chức bởi những người đam mê thể thao và đội ngũ y tế chuyên nghiệp, đảm bảo trải nghiệm an toàn và bùng nổ nhất cho bạn.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- LỊCH TRÌNH -->
+    <section id="schedule" class="schedule py-section bg-alt">
+        <div class="container fade-up">
+            <h2 class="section-title text-center">Lịch Trình Sự Kiện</h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-time">05:00</div>
+                    <div class="timeline-content">
+                        <h3>Tập trung & Check-in</h3>
+                        <p>Nhận BIB, gửi đồ và tham gia khởi động chung cùng ban huấn luyện.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-time">06:00</div>
+                    <div class="timeline-content">
+                        <h3>Khai mạc & Xuất phát</h3>
+                        <p>Bắt đầu tính thời gian và xuất phát lần lượt theo các cự ly đăng ký.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-time">08:00</div>
+                    <div class="timeline-content">
+                        <h3>Về đích & Bế mạc</h3>
+                        <p>Trao giải, chụp hình lưu niệm và giao lưu cộng đồng runner.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CỰ LY -->
+    <section id="distance" class="distance py-section">
+        <div class="container fade-up">
+            <h2 class="section-title text-center">Cự Ly Tham Gia</h2>
+            <div class="distance-grid">
+                <!-- Card 3KM -->
+                <div class="distance-card">
+                    <div class="card-header">
+                        <h3>3KM</h3>
+                        <span class="card-subtitle">Cự ly phong trào</span>
+                    </div>
+                    <div class="card-body">
+                        <ul class="card-features">
+                            <li><strong>Phù hợp:</strong> Người mới bắt đầu chạy, rèn luyện nhẹ nhàng</li>
+                            <li><strong>Lệ phí:</strong> 150.000 VNĐ</li>
+                            <li><strong>Quyền lợi:</strong> Áo thi đấu chính thức, số BIB tham gia, Huy chương kỷ niệm</li>
+                        </ul>
+                        <button class="btn btn-outline btn-full" onclick="selectDistance('3km')">Chọn cự ly này</button>
+                    </div>
+                </div>
+                
+                <!-- Card 5KM -->
+                <div class="distance-card highlight">
+                    <div class="card-header">
+                        <h3>5KM</h3>
+                        <span class="card-subtitle">Cự ly thử thách</span>
+                    </div>
+                    <div class="card-body">
+                        <ul class="card-features">
+                            <li><strong>Phù hợp:</strong> Người đã có kinh nghiệm, bứt phá bản thân</li>
+                            <li><strong>Lệ phí:</strong> 250.000 VNĐ</li>
+                            <li><strong>Quyền lợi:</strong> Áo thi đấu chính thức, số BIB tham gia, Huy chương kỷ niệm, Giải thưởng hấp dẫn dành cho VĐV chiến thắng</li>
+                        </ul>
+                        <button class="btn btn-primary btn-full" onclick="selectDistance('5km')">Chọn cự ly này</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- LƯU Ý AN TOÀN -->
+    <section id="safety" class="safety py-section bg-alt">
+        <div class="container fade-up">
+            <h2 class="section-title text-center">Lưu Ý An Toàn</h2>
+            <div class="safety-list">
+                <div class="safety-item">
+                    <span class="safety-icon">✓</span>
+                    <p>Đến đúng giờ để check-in và nhận BIB.</p>
+                </div>
+                <div class="safety-item">
+                    <span class="safety-icon">✓</span>
+                    <p>Đeo BIB trước ngực trong suốt quá trình tham gia.</p>
+                </div>
+                <div class="safety-item">
+                    <span class="safety-icon">✓</span>
+                    <p>Không sử dụng BIB của người khác dưới mọi hình thức.</p>
+                </div>
+                <div class="safety-item">
+                    <span class="safety-icon">✓</span>
+                    <p>Chọn cự ly phù hợp với thể trạng sức khỏe hiện tại.</p>
+                </div>
+                <div class="safety-item">
+                    <span class="safety-icon">✓</span>
+                    <p>Khởi động kỹ trước khi chạy và giãn cơ sau khi hoàn thành.</p>
+                </div>
+                <div class="safety-item">
+                    <span class="safety-icon warning">!</span>
+                    <p>Dừng chạy và liên hệ ngay bộ phận y tế nếu cảm thấy mệt, chóng mặt hoặc có dấu hiệu bất thường.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FORM ĐĂNG KÝ -->
+    <section id="register" class="register py-section">
+        <div class="container fade-up">
+            <div class="form-container">
+                <h2 class="section-title">Thông Tin Đăng Ký</h2>
+                <form id="registrationForm" onsubmit="handleFormSubmit(event)">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="fullname">Họ và tên *</label>
+                            <input type="text" id="fullname" name="fullname" placeholder="Nhập họ và tên đầy đủ" required>
+                            <span class="error-msg" id="error-fullname"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="dob">Ngày sinh *</label>
+                            <input type="date" id="dob" name="dob" required>
+                            <span class="error-msg" id="error-dob"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="gender">Giới tính *</label>
+                            <select id="gender" name="gender" required>
+                                <option value="" disabled selected>Chọn giới tính</option>
+                                <option value="Nam">Nam</option>
+                                <option value="Nữ">Nữ</option>
+                            </select>
+                            <span class="error-msg" id="error-gender"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Số điện thoại *</label>
+                            <input type="tel" id="phone" name="phone" placeholder="VD: 0912345678" pattern="[0-9]{10}" required>
+                            <span class="error-msg" id="error-phone"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Gmail nhận xác nhận *</label>
+                            <input type="email" id="email" name="email" placeholder="VD: example@gmail.com" required>
+                            <span class="error-msg" id="error-email"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="confirmEmail">Nhập lại Gmail *</label>
+                            <input type="email" id="confirmEmail" name="confirmEmail" placeholder="Nhập lại Gmail ở trên" required>
+                            <span class="error-msg" id="error-confirmEmail"></span>
+                        </div>
+                        
+                        <!-- HONEYPOT TRÁNH SPAM -->
+                        <div style="display:none;">
+                            <input type="text" id="website_url" name="website_url" tabindex="-1" autocomplete="off">
+                        </div>
+                        <div class="form-group full-width">
+                            <label for="address">Địa chỉ hiện tại *</label>
+                            <input type="text" id="address" name="address" placeholder="Nhập địa chỉ của bạn" required>
+                            <span class="error-msg" id="error-address"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="distance-select">Cự ly đăng ký *</label>
+                            <select id="distance-select" name="distance" required onchange="updateFee()">
+                                <option value="" disabled selected>Chọn cự ly</option>
+                                <option value="3km" data-fee="150000">3KM (150.000đ)</option>
+                                <option value="5km" data-fee="250000">5KM (250.000đ)</option>
+                            </select>
+                            <span class="error-msg" id="error-distance-select"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="size">Size áo *</label>
+                            <select id="size" name="size" required>
+                                <option value="" disabled selected>Chọn size áo</option>
+                                <option value="S">Size S</option>
+                                <option value="M">Size M</option>
+                                <option value="L">Size L</option>
+                                <option value="XL">Size XL</option>
+                                <option value="XXL">Size XXL</option>
+                            </select>
+                            <span class="error-msg" id="error-size"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="emergencyName">Người liên hệ khẩn cấp *</label>
+                            <input type="text" id="emergencyName" name="emergencyName" placeholder="Tên người liên hệ" required>
+                            <span class="error-msg" id="error-emergencyName"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="emergencyPhone">SĐT khẩn cấp *</label>
+                            <input type="tel" id="emergencyPhone" name="emergencyPhone" placeholder="SĐT người liên hệ" pattern="[0-9]{10}" required>
+                            <span class="error-msg" id="error-emergencyPhone"></span>
+                        </div>
+                        
+                        <div class="form-group full-width checkbox-group">
+                            <input type="checkbox" id="agreement" name="agreement" required>
+                            <label for="agreement">Tôi cam kết đủ điều kiện sức khỏe để tham gia giải chạy và đồng ý với các điều lệ của Ban Tổ Chức.</label>
+                            <span class="error-msg" id="error-agreement"></span>
+                        </div>
+                        <div class="form-group full-width checkbox-group">
+                            <input type="checkbox" id="confirmEmailCheck" name="confirmEmailCheck" required>
+                            <label for="confirmEmailCheck">Tôi xác nhận địa chỉ Gmail ở trên là hoàn toàn chính xác để nhận mã đăng ký và QR thanh toán.</label>
+                            <span class="error-msg" id="error-confirmEmailCheck"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary btn-large btn-full" id="submitBtn">
+                            Tiếp tục thanh toán
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- KHU VỰC THANH TOÁN (Ẩn mặc định) -->
+    <section id="paymentSection" class="register py-section" style="display: none;">
+        <div class="container fade-up visible">
+            <div class="form-container" style="text-align: center;">
+                <h2 class="section-title">Thanh Toán Đăng Ký</h2>
+                <div class="info-box" style="text-align: left; background: var(--bg-light); border-left: 4px solid var(--blue-sport); padding: 15px; margin-bottom: 20px;">
+                    <p><strong>Mã đăng ký:</strong> <span id="paymentCode" class="highlight-text" style="color: var(--blue-sport);"></span></p>
+                    <p style="font-size: 0.9rem; color: var(--navy-sub); margin-top: 5px;">Mã này đã được gửi về Gmail của bạn.</p>
+                </div>
+                
+                <div class="qr-wrapper" style="margin-bottom: 20px;">
+                    <img id="paymentQrImage" src="" alt="QR Code Thanh Toán" style="max-width: 250px; border: 1px solid #E5E7EB; border-radius: 8px; padding: 10px;">
+                </div>
+                
+                <div class="payment-info" style="text-align: left; background: #f9fafb; padding: 20px; border-radius: 8px; margin-bottom: 25px;">
+                    <div class="info-row" style="display: flex; justify-content: space-between; margin-bottom: 15px; border-bottom: 1px solid #e5e7eb; padding-bottom: 10px;">
+                        <span class="label" style="color: #6b7280; font-weight: 500;">Ngân hàng:</span>
+                        <span class="value" id="paymentBankName" style="font-weight: 600;"></span>
+                    </div>
+                    <div class="info-row" style="display: flex; justify-content: space-between; margin-bottom: 15px; border-bottom: 1px solid #e5e7eb; padding-bottom: 10px;">
+                        <span class="label" style="color: #6b7280; font-weight: 500;">Chủ tài khoản:</span>
+                        <span class="value" id="paymentAccountName" style="font-weight: 600;"></span>
+                    </div>
+                    <div class="info-row" style="display: flex; justify-content: space-between; margin-bottom: 15px; border-bottom: 1px solid #e5e7eb; padding-bottom: 10px;">
+                        <span class="label" style="color: #6b7280; font-weight: 500;">Số tài khoản:</span>
+                        <div class="copy-group" style="display: flex; gap: 10px; align-items: center;">
+                            <span class="value" id="paymentBankAccount" style="font-weight: 600;"></span>
+                            <button type="button" class="btn-copy" onclick="copyText('paymentBankAccount')" style="padding: 4px 8px; font-size: 0.8rem; background: var(--bg-alt); border: 1px solid #d1d5db; border-radius: 4px; cursor: pointer;">Copy</button>
+                        </div>
+                    </div>
+                    <div class="info-row" style="display: flex; justify-content: space-between; margin-bottom: 15px; border-bottom: 1px solid #e5e7eb; padding-bottom: 10px;">
+                        <span class="label" style="color: #6b7280; font-weight: 500;">Số tiền:</span>
+                        <div class="copy-group" style="display: flex; gap: 10px; align-items: center;">
+                            <span class="value highlight-text" id="paymentFee" style="color: var(--error); font-weight: bold;"></span>
+                            <button type="button" class="btn-copy" onclick="copyText('paymentFee', true)" style="padding: 4px 8px; font-size: 0.8rem; background: var(--bg-alt); border: 1px solid #d1d5db; border-radius: 4px; cursor: pointer;">Copy</button>
+                        </div>
+                    </div>
+                    <div class="info-row vertical" style="margin-bottom: 10px;">
+                        <span class="label" style="display: block; color: #6b7280; font-weight: 500; margin-bottom: 5px;">Nội dung chuyển khoản (BẮT BUỘC):</span>
+                        <div class="copy-group" style="display: flex; justify-content: space-between; align-items: center; background: #fff; padding: 10px; border: 1px dashed var(--error); border-radius: 4px;">
+                            <span class="value highlight-text" id="paymentTransferContent" style="color: var(--error); font-weight: bold;"></span>
+                            <button type="button" class="btn-copy" onclick="copyText('paymentTransferContent')" style="padding: 4px 8px; font-size: 0.8rem; background: var(--error); color: white; border: none; border-radius: 4px; cursor: pointer;">Copy</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <button type="button" class="btn btn-primary btn-large btn-full" id="btnShowUploadSection">
+                    TÔI ĐÃ THANH TOÁN
+                </button>
+                <p style="margin-top: 15px; font-size: 0.9rem; color: #6b7280;">Bấm nút trên để mở khu vực tải ảnh hóa đơn (Bill).</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- KHU VỰC TẢI HÓA ĐƠN (Ẩn mặc định) -->
+    <section id="uploadSection" class="register py-section" style="display: none;">
+        <div class="container fade-up visible">
+            <div class="form-container" style="text-align: center;">
+                <h2 class="section-title">Tải Hóa Đơn Chuyển Khoản</h2>
+                <p style="margin-bottom: 20px; color: var(--navy-sub);">Vui lòng tải lên ảnh chụp màn hình giao dịch thành công.</p>
+                
+                <!-- Vùng Drag & Drop -->
+                <div id="dropZone" class="upload-dropzone" style="border: 2px dashed var(--blue-sport); border-radius: 8px; padding: 40px 20px; background: #f0f9ff; cursor: pointer; transition: all 0.3s ease; margin-bottom: 20px;">
+                    <div style="font-size: 3rem; margin-bottom: 10px;">📤</div>
+                    <p style="font-weight: 600; color: var(--navy-main); margin-bottom: 5px;">Nhấn để chọn ảnh hoặc Kéo thả ảnh vào đây</p>
+                    <p style="font-size: 0.85rem; color: #6b7280;">Hỗ trợ định dạng: JPG, JPEG, PNG, WEBP (Tối đa 2MB)</p>
+                </div>
+                
+                <input type="file" id="billUploadInput" accept="image/jpeg, image/png, image/webp, image/jpg" style="display: none;">
+                
+                <!-- Vùng Preview Ảnh -->
+                <div id="previewContainer" style="display: none; margin-bottom: 25px;">
+                    <p style="font-weight: 600; color: var(--navy-main); margin-bottom: 10px;">Ảnh đã chọn:</p>
+                    <div style="position: relative; display: inline-block;">
+                        <img id="previewImage" src="" alt="Preview Bill" style="max-width: 100%; max-height: 300px; border-radius: 8px; border: 1px solid #d1d5db; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                        <button id="resetUploadBtn" style="position: absolute; top: -10px; right: -10px; background: var(--error); color: white; border: none; border-radius: 50%; width: 30px; height: 30px; cursor: pointer; font-weight: bold; box-shadow: 0 2px 4px rgba(0,0,0,0.2);">X</button>
+                    </div>
+                </div>
+                
+                <button type="button" class="btn btn-primary btn-large btn-full" id="submitBillBtn" disabled>
+                    GỬI BILL XÁC NHẬN
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="container footer-grid">
+            <div class="footer-info">
+                <h3>BƯỚC CHẠY NHỊP SỐNG</h3>
+                <p>Giải chạy bộ cộng đồng - Lan tỏa lối sống khỏe mạnh và năng động.</p>
+            </div>
+            <div class="footer-contact">
+                <h4>Liên Hệ</h4>
+                <p>📍 Địa điểm: Sân vận động Ngũ Hành Sơn, Đà Nẵng</p>
+                <p>📧 Email: buocchaynhipsonggg@gmail.com</p>
+                <p>📞 Ms. Yến Nhi: +84 327 863 475 (Trưởng BTC)</p>
+                <p>📞 Ms. Đông An: +84 917 445 104 (Phó BTC)</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Bước Chạy Nhịp Sống. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- MODAL XÁC NHẬN GMAIL -->
+    <div id="confirmSubmitModal" class="modal">
+        <div class="modal-content fade-up" style="max-width: 500px; text-align: center;">
+            <div class="modal-body" style="padding: 30px;">
+                <div style="font-size: 3rem; margin-bottom: 15px;">✉️</div>
+                <h3 style="margin-bottom: 15px; color: var(--navy-main);">Xác nhận thông tin</h3>
+                <p style="margin-bottom: 10px; color: var(--navy-sub);">Gmail nhận thông tin của bạn là:</p>
+                <div style="background: var(--bg-light); padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+                    <strong id="confirmModalEmailTxt" style="color: var(--blue-sport); font-size: 1.1rem;"></strong>
+                </div>
+                <p style="margin-bottom: 25px; color: var(--error); font-size: 0.9rem;">
+                    Vui lòng kiểm tra kỹ. Mã đăng ký và thông tin nhận BIB sẽ được gửi đến địa chỉ này!
+                </p>
+                <div style="display: flex; gap: 15px; justify-content: center;">
+                    <button class="btn btn-outline" onclick="closeConfirmModal()">Sửa lại email</button>
+                    <button class="btn btn-primary" id="finalSubmitBtn" onclick="submitRegistration()">Xác nhận gửi</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification cho thao tác Copy -->
+    <div id="toast" class="toast">Đã copy thành công!</div>
+
+    <script src="assets/js/config.js"></script>
+    <script src="assets/js/registration.js"></script>
+    <script src="assets/js/payment-proof.js"></script>
+</body>
+</html>

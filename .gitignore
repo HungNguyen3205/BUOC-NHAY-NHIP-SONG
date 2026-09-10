@@ -1,0 +1,5 @@
+.gemini/
+taste_analysis.md
+taste_tokens.json
+.vscode/
+.DS_Store

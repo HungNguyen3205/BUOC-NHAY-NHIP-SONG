@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Xác nhận gửi bill - BƯỚC CHẠY NHỊP SỐNG</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <style>
+        .thank-you-page {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg-alt);
+            padding: 40px 20px;
+        }
+        .thank-you-card {
+            background: var(--white);
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            max-width: 600px;
+            width: 100%;
+            overflow: hidden;
+            animation: fadeUp 0.6s ease forwards;
+        }
+        .ty-header {
+            background: var(--navy-main);
+            color: var(--white);
+            padding: 30px;
+            text-align: center;
+        }
+        .ty-header h1 {
+            font-family: 'Anton', sans-serif;
+            font-size: 2.2rem;
+            letter-spacing: 1px;
+            margin-bottom: 15px;
+            color: var(--yellow-energy);
+        }
+        .ty-body {
+            padding: 30px;
+        }
+        .status-badge {
+            display: inline-block;
+            background: #fff8eb;
+            color: #d97706; /* Màu cam */
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            margin-bottom: 25px;
+            border: 1px solid #fef08a;
+            font-size: 1.1rem;
+        }
+        .info-box {
+            background: var(--bg-light);
+            border-left: 4px solid var(--blue-sport);
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            font-size: 1.1rem;
+        }
+        .ty-footer {
+            padding: 0 30px 30px;
+            display: flex;
+            gap: 15px;
+            flex-direction: column;
+        }
+    </style>
+</head>
+<body>
+    <div class="thank-you-page">
+        <div class="thank-you-card">
+            <div class="ty-header">
+                <h1>CẢM ƠN BẠN ĐÃ GỬI ĐĂNG KÝ!</h1>
+                <p>Ban tổ chức đã nhận được thông tin và hình ảnh thanh toán của bạn.</p>
+            </div>
+            
+            <div class="ty-body">
+                <div style="text-align: center;">
+                    <div class="status-badge">⏳ TRẠNG THÁI: CHỜ KIỂM TRA</div>
+                </div>
+
+                <div class="info-box">
+                    <p style="margin-bottom: 10px;"><strong>Mã đăng ký:</strong> <span id="tyCode" class="highlight-text" style="color: var(--blue-sport); font-weight: bold;">Đang tải...</span></p>
+                    <p style="margin-bottom: 0;"><strong>Họ tên:</strong> <span id="tyName">...</span></p>
+                </div>
+
+                <p style="text-align: center; margin-bottom: 20px; color: var(--navy-sub); line-height: 1.6;">
+                    Ban tổ chức sẽ đối chiếu giao dịch trong tài khoản ngân hàng và gửi kết quả đến Gmail bạn đã đăng ký.
+                </p>
+
+                <div style="background: #FEE2E2; padding: 15px; border-radius: 8px; font-size: 0.95rem; color: #991B1B; text-align: center; border: 1px dashed #F87171;">
+                    <strong>Lưu ý:</strong> Hình ảnh bill không đồng nghĩa với việc giao dịch đã được xác nhận hợp lệ.
+                </div>
+            </div>
+
+            <div class="ty-footer">
+                <button class="btn btn-primary btn-full" onclick="copyText('tyCode')">Sao chép mã đăng ký</button>
+                <a href="index.html" class="btn btn-outline btn-full" style="text-align: center;">Quay lại trang chủ</a>
+                <div style="display: flex; gap: 10px; margin-top: 10px;">
+                    <a href="#" id="tyFanpage" target="_blank" class="btn btn-outline" style="flex: 1; text-align: center; font-size: 0.9rem;">Liên hệ Fanpage</a>
+                    <button onclick="resendBill()" class="btn btn-outline" style="flex: 1; text-align: center; font-size: 0.9rem;">Gửi lại bill nếu cần</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification cho thao tác Copy -->
+    <div id="toast" class="toast">Đã copy thành công!</div>
+
+    <script src="assets/js/config.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const code = urlParams.get('code');
+            
+            if (!code) {
+                alert("Không tìm thấy mã đăng ký!");
+                window.location.href = 'index.html';
+                return;
+            }
+
+            // Gán dữ liệu từ config
+            document.getElementById('tyFanpage').href = CONFIG.FACEBOOK_URL;
+
+            // Đọc dữ liệu tạm từ localStorage
+            const localDataStr = localStorage.getItem('bcns_registration');
+            if (localDataStr) {
+                try {
+                    const data = JSON.parse(localDataStr);
+                    if (data.code === code) {
+                        document.getElementById('tyCode').textContent = data.code;
+                        document.getElementById('tyName').textContent = data.fullname || "Không có sẵn";
+                    } else {
+                        document.getElementById('tyCode').textContent = code;
+                        document.getElementById('tyName').textContent = "Không có sẵn";
+                    }
+                } catch(e) {
+                    document.getElementById('tyCode').textContent = code;
+                }
+            } else {
+                document.getElementById('tyCode').textContent = code;
+            }
+        });
+
+        function copyText(elementId) {
+            let text = document.getElementById(elementId).textContent;
+            navigator.clipboard.writeText(text).then(() => {
+                showToast();
+            }).catch(err => {
+                console.error('Không thể copy: ', err);
+            });
+        }
+
+        function showToast() {
+            const toast = document.getElementById('toast');
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 2000);
+        }
+
+        function resendBill() {
+            // Chuyển hướng người dùng về trang chủ nhưng giả lập trạng thái upload bill
+            // Để đơn giản, chỉ cần chuyển về index.html và báo họ có thể đăng ký lại form nhanh nhờ autosave
+            // Tuy nhiên, vì localStorage.bcns_registration vẫn còn code (tôi chưa xóa nó đi sau khi submit bill ở bước này? À, trong payment-proof.js tôi có xóa 'bcns_form_draft' nhưng KHÔNG xóa 'bcns_registration'!)
+            
+            // Xóa form_draft đi
+            localStorage.removeItem('bcns_form_draft');
+            // Cứ quay về index và có thông báo tạm
+            alert("Bạn hãy tải lại trang chủ, điền lại đúng số điện thoại và Gmail để hệ thống bỏ qua bước form và cấp lại luồng upload bill nhé (nếu bạn cần).");
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+</html>

@@ -42,11 +42,11 @@ function setupProperties() {
   var active = SpreadsheetApp.getActiveSpreadsheet();
 
   props.setProperties({
-    'SPREADSHEET_ID': active ? active.getId() : (props.getProperty("SPREADSHEET_ID") || ""),
+    'SPREADSHEET_ID': '10LvabZRxCr4Sa8FDMQHhxqEDcbEhLmbDxZh7svKt_Gs',
     // Không ghi đè ID thật nếu bạn chạy setupProperties() lại.
-    'DRIVE_FOLDER_ID': currentFolderId || 'THAY_BẰNG_ID_THƯ_MỤC_DRIVE_CỦA_BẠN',
-    'SUPPORT_EMAIL': 'buocchaynhipsonggg@gmail.com',
-    'FACEBOOK_URL': 'https://facebook.com/buocchaynhipsong',
+    'DRIVE_FOLDER_ID': '18pnA1b5TdtVNhJIydVqWxDUskgsx2GeY',
+    'SUPPORT_EMAIL': 'nhipsongbuocchay@gmail.com',
+    'FACEBOOK_URL': 'https://www.facebook.com/profile.php?id=61593697175095',
     'LOGO_URL': 'https://via.placeholder.com/150x50.png?text=LOGO+BCNS',
     'SHEET_NAME': 'DANG_KY_BCNS',
     'EVENT_NAME': 'BƯỚC CHẠY NHỊP SỐNG 2026',
@@ -69,6 +69,16 @@ function getDriveAccessHelp_(error) {
     "tài khoản chạy script phải có quyền Editor với thư mục.",
     "Chi tiết: " + error
   ].join(" ");
+}
+
+function doGet() {
+  return ContentService
+    .createTextOutput(JSON.stringify({
+      success: true,
+      message: "BCNS API đang hoạt động",
+      version: "2026-09-10-02"
+    }))
+    .setMimeType(ContentService.MimeType.JSON);
 }
 
 // =====================================================================================
@@ -152,7 +162,7 @@ function submitFullRegistration(data) {
     var newRow = [
       timestamp, data.code, data.fullname, data.dob, data.gender, data.phone, data.email, data.address,
       data.distance, data.size, data.emergencyName, data.emergencyPhone, data.fee || 0,
-      data.transferContent, fileId, imageFormula, "CHỜ KIỂM TRA", "", "", "", "", "", 
+      data.transferContent, fileId, imageFormula, "", "", "", "", "", "", 
       "[" + Utilities.formatDate(new Date(), "GMT+7", "dd/MM HH:mm") + "] Tạo mới đăng ký và tải bill."
     ];
     
@@ -215,9 +225,9 @@ function handleStatusChange(e) {
   var lock = LockService.getScriptLock();
   lock.waitLock(10000);
   try {
-    if (status === "HỢP LỆ") {
+    if (status === "THANH TOÁN THÀNH CÔNG") {
       processApproved(sheet, row, conf);
-    } else if (status === "KHÔNG HỢP LỆ") {
+    } else if (status === "THANH TOÁN THẤT BẠI") {
       processRejected(sheet, row, conf);
     }
   } finally {
@@ -241,7 +251,7 @@ function processApproved(sheet, row, conf) {
     sheet.getRange(row, 20).setValue("ĐÃ GỬI"); // Đã gửi mail
     sheet.getRange(row, 21).setValue("XÁC NHẬN HỢP LỆ"); // Loại mail cuối
     sheet.getRange(row, 22).setValue(timeNow); // TG gửi mail
-    sheet.getRange(row, 17).setValue("ĐÃ XÁC NHẬN"); // Đổi trạng thái cuối cùng
+    sheet.getRange(row, 17).setValue("THANH TOÁN THÀNH CÔNG");
   } else {
     sheet.getRange(row, 20).setValue("GỬI LỖI");
   }
@@ -254,7 +264,7 @@ function processRejected(sheet, row, conf) {
   
   if (!reason || reason.toString().trim() === "") {
     SpreadsheetApp.getUi().alert("Bắt buộc phải nhập 'Lý do không hợp lệ' (Cột R) trước khi chọn KHÔNG HỢP LỆ.");
-    sheet.getRange(row, 17).setValue("CHỜ KIỂM TRA"); // Hoàn tác
+    sheet.getRange(row, 17).clearContent(); // Hoàn tác
     return;
   }
   
@@ -268,7 +278,7 @@ function processRejected(sheet, row, conf) {
     sheet.getRange(row, 20).setValue("ĐÃ GỬI"); 
     sheet.getRange(row, 21).setValue("THÔNG BÁO KHÔNG HỢP LỆ"); 
     sheet.getRange(row, 22).setValue(timeNow); 
-    sheet.getRange(row, 17).setValue("ĐÃ HỦY"); // Đổi trạng thái cuối
+    sheet.getRange(row, 17).setValue("THANH TOÁN THẤT BẠI");
   } else {
     sheet.getRange(row, 20).setValue("GỬI LỖI");
   }
@@ -386,10 +396,24 @@ function sendRejectedEmail(rowData, conf) {
 // =====================================================================================
 // 4. MENU QUẢN TRỊ TRÊN GOOGLE SHEETS
 // =====================================================================================
+function setupStatusTrigger() {
+  var conf = getConfig();
+  ScriptApp.getProjectTriggers().forEach(function(trigger) {
+    if (trigger.getHandlerFunction() === "handleStatusChange") {
+      ScriptApp.deleteTrigger(trigger);
+    }
+  });
+  ScriptApp.newTrigger("handleStatusChange")
+    .forSpreadsheet(conf.SPREADSHEET_ID)
+    .onEdit()
+    .create();
+  Logger.log("Đã tạo trigger gửi email khi thay đổi trạng thái.");
+}
+
 function createAdminMenu() {
   SpreadsheetApp.getUi().createMenu('BCNS')
-    .addItem('Đánh dấu HỢP LỆ', 'menuMarkValid')
-    .addItem('Đánh dấu KHÔNG HỢP LỆ', 'menuMarkInvalid')
+    .addItem('Thanh toán thành công', 'menuMarkValid')
+    .addItem('Thanh toán thất bại', 'menuMarkInvalid')
     .addItem('Gửi lại email dòng đang chọn', 'resendEmailForSelectedRow')
     .addItem('Mở bill dòng đang chọn', 'menuOpenBill')
     .addItem('Kiểm tra dữ liệu dòng đang chọn', 'menuCheckData')
@@ -405,7 +429,7 @@ function menuMarkValid() {
   var sheet = SpreadsheetApp.getActiveSheet();
   var row = sheet.getActiveCell().getRow();
   if (row <= 1) return;
-  sheet.getRange(row, 17).setValue("HỢP LỆ");
+  sheet.getRange(row, 17).setValue("THANH TOÁN THÀNH CÔNG");
   handleStatusChange({ source: SpreadsheetApp.getActiveSpreadsheet(), range: sheet.getRange(row, 17) });
 }
 
@@ -423,7 +447,7 @@ function menuMarkInvalid() {
       return;
     }
     sheet.getRange(row, 18).setValue(reason); // Cột R
-    sheet.getRange(row, 17).setValue("KHÔNG HỢP LỆ");
+    sheet.getRange(row, 17).setValue("THANH TOÁN THẤT BẠI");
     handleStatusChange({ source: SpreadsheetApp.getActiveSpreadsheet(), range: sheet.getRange(row, 17) });
   }
 }
@@ -436,10 +460,10 @@ function resendEmailForSelectedRow() {
   var conf = getConfig();
   var status = sheet.getRange(row, 17).getValue();
   
-  if (status === "ĐÃ XÁC NHẬN") {
+  if (status === "THANH TOÁN THÀNH CÔNG") {
     processApproved(sheet, row, conf);
     SpreadsheetApp.getUi().alert("Đã gửi lại email Xác Nhận Tham Gia.");
-  } else if (status === "ĐÃ HỦY" || status === "KHÔNG HỢP LỆ") {
+  } else if (status === "THANH TOÁN THẤT BẠI") {
     processRejected(sheet, row, conf);
     SpreadsheetApp.getUi().alert("Đã gửi lại email Thông Báo Không Hợp Lệ.");
   } else {

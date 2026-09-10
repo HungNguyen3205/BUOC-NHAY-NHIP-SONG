@@ -172,9 +172,25 @@ document.addEventListener("DOMContentLoaded", () => {
         fetch(CONFIG.APPS_SCRIPT_URL, {
             method: "POST",
             headers: { "Content-Type": "text/plain;charset=utf-8" },
-            body: JSON.stringify(payload)
+            body: JSON.stringify(payload),
+            redirect: "follow"
         })
-        .then(res => res.json())
+        .then(async (res) => {
+            const rawText = await res.text();
+            let data;
+            try {
+                data = JSON.parse(rawText);
+            } catch (parseError) {
+                throw new Error(
+                    "Máy chủ không trả về JSON. HTTP " + res.status +
+                    ". Phản hồi: " + rawText.slice(0, 180)
+                );
+            }
+            if (!res.ok) {
+                throw new Error(data.message || ("HTTP " + res.status));
+            }
+            return data;
+        })
         .then(data => {
             if (data.success) {
                 // Xóa nháp vì đã upload bill thành công
@@ -189,7 +205,7 @@ document.addEventListener("DOMContentLoaded", () => {
         })
         .catch(err => {
             console.error("Lỗi:", err);
-            alert("Lỗi mạng khi tải hóa đơn lên máy chủ. Vui lòng thử lại.");
+            alert("Không thể gửi bill. Chi tiết: " + (err.message || err));
             submitBillBtn.innerHTML = 'GỬI BILL XÁC NHẬN';
             submitBillBtn.disabled = false;
             resetBtn.disabled = false;

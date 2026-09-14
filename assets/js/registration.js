@@ -194,8 +194,8 @@ function handleFormSubmit(event) {
         isValid = false;
     }
 
-    let email = document.getElementById('email').value.trim().toLowerCase();
-    let confirmEmail = document.getElementById('confirmEmail').value.trim().toLowerCase();
+    let email = document.getElementById('email').value.trim();
+    let confirmEmail = document.getElementById('confirmEmail').value.trim();
     
     document.getElementById('email').value = email;
     document.getElementById('confirmEmail').value = confirmEmail;
@@ -205,7 +205,7 @@ function handleFormSubmit(event) {
         isValid = false;
     } else {
         // Kiểm tra typo
-        const domain = email.split('@')[1];
+        const domain = email.split('@')[1].toLowerCase();
         if (typoDomains.includes(domain)) {
             const correctEmail = email.split('@')[0] + '@gmail.com';
             showError('email', `Có phải bạn muốn nhập: <a href="javascript:void(0)" onclick="fixEmail('email', '${correctEmail}')" style="color: var(--blue-sport); text-decoration: underline;">${correctEmail}</a>?`);
@@ -213,7 +213,7 @@ function handleFormSubmit(event) {
         }
     }
 
-    if (email !== confirmEmail) {
+    if (email.toLowerCase() !== confirmEmail.toLowerCase()) {
         showError('confirmEmail', 'Hai địa chỉ Email không khớp nhau.');
         isValid = false;
     }

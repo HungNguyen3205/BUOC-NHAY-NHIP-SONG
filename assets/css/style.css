@@ -1357,3 +1357,219 @@ select:focus {
     }
 }
 
+
+/* ==========================================================================
+   RUNNER SCROLL ANIMATION & CHECKPOINTS
+   ========================================================================== */
+.hero {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    min-height: 100svh;
+    background:
+        radial-gradient(
+            circle at 75% 32%,
+            rgba(39, 170, 225, 0.22),
+            transparent 36%
+        ),
+        linear-gradient(135deg, #eef9ff, #fffaf0);
+}
+
+.runner-visual {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    border-radius: 28px;
+    background: #073562;
+    box-shadow: 0 30px 80px rgba(6, 27, 53, 0.2);
+}
+
+.runner-video,
+.runner-poster {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.runner-video {
+    z-index: 2;
+    object-fit: cover;
+    object-position: center;
+    opacity: 0;
+    transition: opacity 500ms ease, transform 1s ease-out;
+}
+
+.runner-video.is-ready {
+    opacity: 1;
+}
+
+.runner-poster {
+    z-index: 1;
+    transition: opacity 500ms ease;
+}
+
+.runner-poster img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.runner-poster.is-hidden {
+    opacity: 0;
+}
+
+.runner-poster.is-visible {
+    opacity: 1;
+}
+
+.runner-energy {
+    position: absolute;
+    right: -15%;
+    bottom: -35%;
+    z-index: 3;
+    width: 65%;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    pointer-events: none;
+    background: rgba(255, 197, 53, 0.16);
+    filter: blur(70px);
+    transition: transform 1s ease-out;
+}
+
+@media (max-width: 768px) {
+    .hero {
+        min-height: auto;
+        padding-top: 96px;
+    }
+
+    .hero-container-split {
+        min-height: auto;
+        grid-template-columns: 1fr;
+    }
+
+    .runner-visual {
+        margin-top: 28px;
+        border-radius: 20px;
+    }
+
+    .runner-video,
+    .runner-poster img {
+        object-fit: cover;
+        object-position: center;
+    }
+
+    .runner-energy {
+        opacity: 0.55;
+        filter: blur(45px);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .runner-video {
+        display: none !important;
+    }
+
+    .runner-poster {
+        opacity: 1 !important;
+    }
+
+    .runner-energy {
+        display: none !important;
+    }
+}
+
+/* Checkpoint Styles */
+.checkpoint-marker {
+    position: absolute;
+    top: -30px;
+    left: 5%;
+    font-size: 8rem;
+    font-family: "Anton", sans-serif;
+    color: rgba(6, 27, 53, 0.03);
+    z-index: 0;
+    pointer-events: none;
+    white-space: nowrap;
+}
+
+.py-section {
+    position: relative;
+    z-index: 1;
+}
+
+@media (max-width: 768px) {
+    .checkpoint-marker {
+        font-size: 4rem;
+        top: 0;
+    }
+}
+
+
+/* ==========================================================================
+   FORM STEPPER
+   ========================================================================== */
+.stepper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 40px;
+    position: relative;
+    max-width: 600px;
+    margin-inline: auto;
+}
+.stepper::before {
+    content: "";
+    position: absolute;
+    top: 15px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: #E5E7EB;
+    z-index: 1;
+}
+.step {
+    position: relative;
+    z-index: 2;
+    background: #FFFFFF;
+    padding: 0 10px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #9CA3AF;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+.step::before {
+    content: "";
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: #E5E7EB;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    color: #FFFFFF;
+    transition: all 0.3s ease;
+}
+.step.active {
+    color: #061B35;
+}
+.step.active::before {
+    background: #FFC535;
+    color: #061B35;
+    border: 4px solid #EEF7FB;
+}
+.step.completed::before {
+    background: #27AAE1;
+    content: "?";
+}
+@media (max-width: 480px) {
+    .stepper {
+        font-size: 0.7rem;
+    }
+}
+

@@ -2,7 +2,7 @@ const CONFIG = {
     EVENT_NAME: "BƯỚC CHẠY NHỊP SỐNG",
     EVENT_DATE: "27/09/2026",
 
-    APPS_SCRIPT_URL: "https://script.google.com/macros/s/AKfycbw8iD4RS3pW2qkmcNWGAYM1yxtzBI5qOZBNWpAPav2JOGKwfI26zLFHLCVxVx8A5rn6/exec",
+    APPS_SCRIPT_URL: "https://script.google.com/macros/s/AKfycbyl7WB0TSakMoXknWRsIXy7mJB8bWdfSZrBrSm7fsCBldB5vJNJ4CLoPBzTKxd1fC7c/exec",
 
     BANK_CODE: "MB",
     BANK_NAME: "MB Bank",

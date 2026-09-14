@@ -66,20 +66,11 @@ function updateFee() {
     }
 }
 
-function preloadPaymentQr(distance) {
-    const qrUrl = CONFIG.FIXED_QR[distance];
-    if (!qrUrl) return;
-    const image = new Image();
-    image.src = qrUrl;
-}
-
 document.addEventListener("DOMContentLoaded", () => {
     const distanceSelect = document.getElementById("distance-select");
     if (distanceSelect) {
-        // Remove the inline onchange from HTML if any, but since we can't be sure, we just add listener
         distanceSelect.addEventListener("change", event => {
             updateFee();
-            preloadPaymentQr(event.target.value);
         });
     }
 });
@@ -253,7 +244,7 @@ function handleFormSubmit(event) {
         email: email,
         address: document.getElementById('address').value.trim(),
         distance: distanceText,
-        distanceVal: distanceVal,
+        distanceValue: distanceVal,
         fee: fee,
         size: document.getElementById('size').value,
         emergencyName: document.getElementById('emergencyName').value.trim(),
@@ -280,24 +271,20 @@ function submitRegistration() {
     // Trạng thái loading
     confirmBtn.innerHTML = '<span class="loader"></span> Đang xử lý...';
     
-    // Sinh mã ngẫu nhiên Offline
-    const shortPhone = pendingFormData.phone.slice(-6);
-    const randomStr = Math.random().toString(36).substring(2, 6).toUpperCase();
+    // Sinh mã ngẫu nhiên Offline, dài 6-10 ký tự, không dấu, in hoa
+    const randomStr = Math.random().toString(36).substring(2, 8).toUpperCase();
+    const code = randomStr;
     
-    // Định dạng mã theo yêu cầu: BCNS-260927-XXXXXX
-    const dateStr = CONFIG.EVENT_DATE ? CONFIG.EVENT_DATE.replace(/\//g, "").slice(0, 6) : "260927";
-    const code = `BCNS-${dateStr}-${shortPhone}${randomStr}`;
+    const distanceValue = pendingFormData.distanceValue;
     
-    const distanceValue = pendingFormData.distanceVal;
-    const transferContent = CONFIG.FIXED_TRANSFER_CONTENT[distanceValue];
+    const transferContent = buildTransferContent(code, distanceValue);
+    const qrUrl = buildVietQrUrl(code, distanceValue);
     
-    if (!transferContent) {
-        console.error("Không xác định được nội dung chuyển khoản");
-    }
-    
-    // Cập nhật thêm code và transferContent vào formData để dùng ở bước sau
-    pendingFormData.code = code;
+    // Cập nhật thêm vào formData để gửi backend
+    pendingFormData.code = code; // Bảo toàn tên trường cũ
+    pendingFormData.registrationCode = code;
     pendingFormData.transferContent = transferContent;
+    // (distanceValue, fee đã có ở bước trước)
     
     // Lưu tạm TOÀN BỘ dữ liệu Form vào localStorage để bước Gửi Bill dùng lại
     localStorage.setItem('bcns_registration', JSON.stringify(pendingFormData));
@@ -316,22 +303,21 @@ function submitRegistration() {
     document.getElementById('paymentAccountName').textContent = CONFIG.ACCOUNT_NAME;
     document.getElementById('paymentBankAccount').textContent = CONFIG.BANK_ACCOUNT;
     document.getElementById('paymentFee').textContent = new Intl.NumberFormat('vi-VN').format(pendingFormData.fee) + ' VNĐ';
-    document.getElementById('paymentTransferContent').textContent = transferContent;
     
-    // Xử lý QR VietQR Cố Định
     const qrImg = document.getElementById('paymentQrImage');
-    const distValue = pendingFormData.distanceVal;
-
+    const transferContentElement = document.getElementById("paymentTransferContent");
+    
     if (!qrImg) {
-        console.error("Không tìm thấy vùng hiển thị QR thanh toán");
+        console.error("Không tìm thấy vùng hiển thị QR");
+    }
+    
+    if (!transferContentElement) {
+        console.error("Không tìm thấy nội dung chuyển khoản");
     }
 
-    if (!CONFIG.FIXED_QR[distValue]) {
-        console.error("Không tìm thấy mã QR cho cự ly đã chọn");
-    }
-
-    qrImg.src = CONFIG.FIXED_QR[distValue];
-    qrImg.alt = `QR thanh toán ${distValue.toUpperCase()} - ${new Intl.NumberFormat("vi-VN").format(CONFIG.FEES[distValue])} VNĐ`;
+    transferContentElement.textContent = transferContent;
+    qrImg.src = qrUrl;
+    qrImg.alt = `QR thanh toán ${distanceValue.toUpperCase()} - ${new Intl.NumberFormat("vi-VN").format(pendingFormData.fee)} VNĐ`;
 
     qrImg.onload = () => {
         qrImg.classList.add("is-loaded");
@@ -341,7 +327,7 @@ function submitRegistration() {
     qrImg.onerror = () => {
         qrImg.classList.remove("is-loaded");
         qrImg.classList.add("has-error");
-        console.error("Không thể tải VietQR cho cự ly:", distValue);
+        console.error("Không thể tải VietQR:", qrUrl);
     };
     
     closeConfirmModal();
@@ -350,6 +336,64 @@ function submitRegistration() {
     setTimeout(() => {
         confirmBtn.innerHTML = 'Xác nhận gửi';
     }, 500);
+}
+
+// ==========================================================================
+// TẠO NỘI DUNG CHUYỂN KHOẢN VÀ QR ĐỘNG
+// ==========================================================================
+function buildTransferContent(registrationCode, distance) {
+    const normalizedCode = String(registrationCode || "")
+        .trim()
+        .toUpperCase()
+        .replace(/[^A-Z0-9]/g, "");
+
+    const distanceMap = {
+        "3km": "3K",
+        "5km": "5K"
+    };
+
+    const shortDistance = distanceMap[distance];
+
+    if (!normalizedCode) {
+        throw new Error("Thiếu mã đăng ký");
+    }
+
+    if (!shortDistance) {
+        throw new Error("Cự ly không hợp lệ");
+    }
+
+    return `BCNS ${normalizedCode} ${shortDistance}`;
+}
+
+function buildVietQrUrl(registrationCode, distance) {
+    const amount = CONFIG.FEES[distance];
+
+    if (!amount) {
+        throw new Error("Không xác định được lệ phí");
+    }
+
+    if (!CONFIG.BANK_CODE) {
+        throw new Error("Thiếu mã ngân hàng");
+    }
+
+    if (!CONFIG.BANK_ACCOUNT) {
+        throw new Error("Thiếu số tài khoản");
+    }
+
+    const transferContent = buildTransferContent(registrationCode, distance);
+
+    const bankCode = encodeURIComponent(CONFIG.BANK_CODE);
+    const accountNumber = encodeURIComponent(CONFIG.BANK_ACCOUNT);
+    const accountName = encodeURIComponent(CONFIG.ACCOUNT_NAME);
+    const addInfo = encodeURIComponent(transferContent);
+
+    return (
+        `https://img.vietqr.io/image/`
+        + `${bankCode}-${accountNumber}-compact2.png`
+        + `?amount=${amount}`
+        + `&addInfo=${addInfo}`
+        + `&accountName=${accountName}`
+    );
 }
 
 // ==========================================================================
@@ -381,3 +425,31 @@ document.addEventListener("DOMContentLoaded", () => {
         footerFacebook.href = CONFIG.FACEBOOK_URL;
     }
 });
+
+// ==========================================================================
+// TIỆN ÍCH COPY
+// ==========================================================================
+function copyText(elementId, customToastMsg) {
+    const el = document.getElementById(elementId);
+    if (!el) return;
+    
+    let textToCopy = el.textContent || el.innerText;
+    
+    if (elementId === 'paymentFee') {
+        textToCopy = textToCopy.replace(/\D/g, ''); 
+    }
+    
+    navigator.clipboard.writeText(textToCopy).then(() => {
+        const toast = document.getElementById('toast');
+        if (toast) {
+            toast.textContent = customToastMsg || "Đã copy thành công!";
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+    }).catch(err => {
+        console.error("Không thể copy:", err);
+        alert("Copy thất bại, vui lòng bôi đen và copy thủ công.");
+    });
+}

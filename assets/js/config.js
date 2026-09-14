@@ -19,15 +19,5 @@ const CONFIG = {
     FEES: {
         "3km": 99000,
         "5km": 149000
-    },
-
-    FIXED_QR: {
-        "3km": "https://img.vietqr.io/image/MB-0917445104-compact2.png?amount=99000&addInfo=BCNS%203KM&accountName=HOANG%20NGUYEN%20DONG%20AN",
-        "5km": "https://img.vietqr.io/image/MB-0917445104-compact2.png?amount=149000&addInfo=BCNS%205KM&accountName=HOANG%20NGUYEN%20DONG%20AN"
-    },
-
-    FIXED_TRANSFER_CONTENT: {
-        "3km": "BCNS 3KM",
-        "5km": "BCNS 5KM"
     }
 };

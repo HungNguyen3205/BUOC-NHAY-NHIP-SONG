@@ -483,21 +483,21 @@
                             <span class="label" style="color: #6b7280; font-weight: 500;">Số tài khoản:</span>
                             <div class="copy-group" style="display: flex; gap: 10px; align-items: center;">
                                 <span class="value" id="paymentBankAccount" style="font-weight: 600;"></span>
-                                <button type="button" class="btn-copy" onclick="copyText('paymentBankAccount')" style="padding: 4px 8px; font-size: 0.8rem; background: var(--bg-alt); border: 1px solid #d1d5db; border-radius: 4px; cursor: pointer;">Copy</button>
+                                <button type="button" class="btn-copy" onclick="copyText('paymentBankAccount', 'Đã sao chép số tài khoản')" style="padding: 4px 8px; font-size: 0.8rem; background: var(--bg-alt); border: 1px solid #d1d5db; border-radius: 4px; cursor: pointer;">SAO CHÉP</button>
                             </div>
                         </div>
                         <div class="info-row" style="display: flex; justify-content: space-between; margin-bottom: 15px; border-bottom: 1px solid #e5e7eb; padding-bottom: 10px;">
                             <span class="label" style="color: #6b7280; font-weight: 500;">Số tiền:</span>
                             <div class="copy-group" style="display: flex; gap: 10px; align-items: center;">
                                 <span class="value highlight-text" id="paymentFee" style="color: var(--error); font-weight: bold;"></span>
-                                <button type="button" class="btn-copy" onclick="copyText('paymentFee', true)" style="padding: 4px 8px; font-size: 0.8rem; background: var(--bg-alt); border: 1px solid #d1d5db; border-radius: 4px; cursor: pointer;">Copy</button>
+                                <button type="button" class="btn-copy" onclick="copyText('paymentFee', 'Đã sao chép số tiền')" style="padding: 4px 8px; font-size: 0.8rem; background: var(--bg-alt); border: 1px solid #d1d5db; border-radius: 4px; cursor: pointer;">SAO CHÉP</button>
                             </div>
                         </div>
                         <div class="info-row vertical" style="margin-bottom: 10px;">
-                            <span class="label" style="display: block; color: #6b7280; font-weight: 500; margin-bottom: 5px;">Nội dung chuyển khoản (BẮT BUỘC):</span>
+                            <span class="label" style="display: block; color: #6b7280; font-weight: 500; margin-bottom: 5px;">NỘI DUNG CHUYỂN KHOẢN &mdash; BẮT BUỘC</span>
                             <div class="copy-group" style="display: flex; justify-content: space-between; align-items: center; background: #fff; padding: 10px; border: 1px dashed var(--error); border-radius: 4px;">
                                 <span class="value highlight-text" id="paymentTransferContent" style="color: var(--error); font-weight: bold;"></span>
-                                <button type="button" class="btn-copy" onclick="copyText('paymentTransferContent')" style="padding: 4px 8px; font-size: 0.8rem; background: var(--error); color: white; border: none; border-radius: 4px; cursor: pointer;">Copy</button>
+                                <button type="button" class="btn-copy" onclick="copyText('paymentTransferContent', 'Đã sao chép nội dung chuyển khoản')" style="padding: 4px 8px; font-size: 0.8rem; background: var(--error); color: white; border: none; border-radius: 4px; cursor: pointer;">SAO CHÉP</button>
                             </div>
                         </div>
                     </div>
@@ -573,15 +573,23 @@
         <div id="confirmSubmitModal" class="modal">
             <div class="modal-content fade-up" style="max-width: 500px; text-align: center;">
                 <div class="modal-body" style="padding: 30px;">
-                    <div style="font-size: 3rem; margin-bottom: 15px;">✉️</div>
+                    <div style="font-size: 2.5rem; margin-bottom: 15px; color: var(--blue-sport);">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                    </div>
                     <h3 style="margin-bottom: 15px; color: var(--navy-main);">Xác nhận thông tin</h3>
                     <p style="margin-bottom: 10px; color: var(--navy-sub);">Gmail nhận thông tin của bạn là:</p>
                     <div style="background: var(--bg-light); padding: 15px; border-radius: 8px; margin-bottom: 20px;">
                         <strong id="confirmModalEmailTxt" style="color: var(--blue-sport); font-size: 1.1rem;"></strong>
                     </div>
-                    <p style="margin-bottom: 25px; color: var(--error); font-size: 0.9rem;">
-                        Vui lòng kiểm tra kỹ. Mã đăng ký và thông tin nhận BIB sẽ được gửi đến địa chỉ này!
-                    </p>
+                    
+                    <div class="email-hint">
+                        <div class="email-hint-main">
+                            Vui lòng kiểm tra kỹ địa chỉ email. Mã đăng ký và thông tin nhận BIB sẽ được gửi đến địa chỉ này.
+                        </div>
+                        <div class="email-hint-sub">
+                            Nếu chưa thấy thư trong hộp thư đến, bạn vui lòng kiểm tra thêm mục <span class="highlight-spam">Spam/Thư rác</span> nhé.
+                        </div>
+                    </div>
                     <div style="display: flex; gap: 15px; justify-content: center;">
                         <button class="btn btn-outline" onclick="closeConfirmModal()">Sửa lại email</button>
                         <button class="btn btn-primary" id="finalSubmitBtn" onclick="submitRegistration()">Xác nhận gửi</button>
@@ -591,7 +599,7 @@
         </div>
 
         <!-- Toast Notification cho thao tác Copy -->
-        <div id="toast" class="toast">Đã copy thành công!</div>
+        <div id="toast" class="toast">Đã sao chép nội dung chuyển khoản</div>
 
         <script src="./assets/js/config.js"></script>
         <script src="./assets/js/registration.js"></script>

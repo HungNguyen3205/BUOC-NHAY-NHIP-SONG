@@ -1799,3 +1799,28 @@ select:focus {
         animation: none;
     }
 }
+
+/* ==========================================================================
+   EMAIL HINT MODAL
+   ========================================================================== */
+.email-hint {
+    text-align: center;
+    line-height: 1.6;
+    margin-bottom: 25px;
+}
+
+.email-hint-main {
+    color: var(--navy-main);
+    font-size: 14.5px;
+    margin-bottom: 6px;
+}
+
+.email-hint-sub {
+    color: #64748b; /* Xám xanh */
+    font-size: 13.5px;
+}
+
+.highlight-spam {
+    color: var(--blue-sport);
+    font-weight: 700;
+}

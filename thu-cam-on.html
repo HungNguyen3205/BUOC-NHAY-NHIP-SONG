@@ -5,172 +5,400 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Xác nhận gửi bill - BƯỚC CHẠY NHỊP SỐNG</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>    
     <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/style.css">
     <style>
+        :root {
+            --ty-navy: #061B35;
+            --ty-blue: #27AAE1;
+            --ty-yellow: #FFC535;
+            --ty-white: #FFFFFF;
+            --ty-muted: #5B6B7D;
+        }
+
         .thank-you-page {
-            min-height: 100vh;
+            min-height: max(100svh, 150vw);
+            background-color: #80caf5;
+            background-image: url("./assets/images/gmail.png");
+            background-repeat: no-repeat;
+            background-position: top center;
+            background-size: min(100%, 1024px) auto;
+            padding: clamp(170px, 19vw, 235px) 20px 60px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .thank-you-card {
+            background: rgba(255, 255, 255, 0.94);
+            border: 1px solid rgba(6, 27, 53, 0.1);
+            box-shadow: 0 30px 80px rgba(6, 27, 53, 0.16), 0 8px 24px rgba(6, 27, 53, 0.08);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 24px;
+            max-width: 680px;
+            width: 100%;
+            padding: 40px;
+            animation: tyFadeUp 0.6s ease forwards;
+        }
+
+        .ty-title {
+            font-family: 'Anton', sans-serif;
+            font-size: clamp(2rem, 5vw, 2.5rem);
+            color: var(--ty-navy);
+            text-align: center;
+            margin-bottom: 12px;
+            line-height: 1.1;
+            font-weight: 400;
+        }
+
+        .ty-desc {
+            font-family: 'Inter', sans-serif;
+            color: var(--ty-muted);
+            text-align: center;
+            font-size: 1.05rem;
+            line-height: 1.6;
+            margin-bottom: 24px;
+        }
+
+        .ty-status-container {
+            text-align: center;
+            margin-bottom: 28px;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 10px 18px;
+            border: 1px solid rgba(255, 197, 53, 0.45);
+            border-radius: 999px;
+            color: #9a5b00;
+            background: rgba(255, 197, 53, 0.15);
+            font-size: 0.9rem;
+            font-weight: 800;
+        }
+
+        .info-box {
+            background: rgba(39, 170, 225, 0.06);
+            border: 1px solid rgba(39, 170, 225, 0.15);
+            border-left: 4px solid var(--ty-blue);
+            border-radius: 14px;
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+
+        .info-row {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-bottom: 16px;
+        }
+
+        .info-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .info-label {
+            font-weight: 600;
+            color: var(--ty-muted);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        #tyCode {
+            color: #087eae;
+            font-weight: 800;
+            font-size: 1.25rem;
+            letter-spacing: 0.04em;
+            overflow-wrap: anywhere;
+        }
+
+        #tyName {
+            color: var(--ty-navy);
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .ty-notice {
+            text-align: center;
+            color: var(--ty-navy);
+            line-height: 1.6;
+            margin-bottom: 24px;
+            font-weight: 500;
+        }
+
+        .ty-warning {
+            padding: 16px 18px;
+            border: 1px solid #fdba74;
+            border-radius: 14px;
+            color: #9a3412;
+            background: #fff7ed;
+            font-size: 0.92rem;
+            line-height: 1.55;
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .ty-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .btn-copy-code {
+            background: var(--yellow-energy);
+            color: var(--ty-navy);
+            font-weight: 800;
+            min-height: 50px;
+            border-radius: 12px;
+            font-size: 1.05rem;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
             display: flex;
             align-items: center;
             justify-content: center;
-            background: var(--bg-alt);
-            padding: 40px 20px;
         }
-        .thank-you-card {
-            background: var(--white);
-            border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-            max-width: 600px;
-            width: 100%;
-            overflow: hidden;
-            animation: fadeUp 0.6s ease forwards;
+
+        .btn-copy-code:hover {
+            background: #e5b02f;
+            transform: translateY(-2px);
         }
-        .ty-header {
-            background: var(--navy-main);
-            color: var(--white);
-            padding: 30px;
-            text-align: center;
+        
+        .btn-copy-code:focus-visible {
+            outline: 2px solid var(--ty-navy);
+            outline-offset: 2px;
         }
-        .ty-header h1 {
-            font-family: 'Anton', sans-serif;
-            font-size: 2.2rem;
-            letter-spacing: 1px;
-            margin-bottom: 15px;
-            color: var(--yellow-energy);
+
+        .ty-support-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 4px;
         }
-        .ty-body {
-            padding: 30px;
-        }
-        .status-badge {
-            display: inline-block;
-            background: #fff8eb;
-            color: #d97706; /* Màu cam */
-            padding: 8px 20px;
-            border-radius: 20px;
-            font-weight: bold;
-            margin-bottom: 25px;
-            border: 1px solid #fef08a;
-            font-size: 1.1rem;
-        }
-        .info-box {
-            background: var(--bg-light);
-            border-left: 4px solid var(--blue-sport);
-            padding: 20px;
-            border-radius: 8px;
-            margin-bottom: 25px;
-            font-size: 1.1rem;
-        }
-        .ty-footer {
-            padding: 0 30px 30px;
+
+        .btn-support {
+            min-height: 48px;
+            border-radius: 10px;
+            font-weight: 600;
             display: flex;
-            gap: 15px;
-            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.95rem;
+            text-decoration: none;
+            background: transparent;
+            border: 2px solid rgba(6, 27, 53, 0.15);
+            color: var(--ty-navy);
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .btn-support:hover {
+            background: rgba(6, 27, 53, 0.05);
+            border-color: rgba(6, 27, 53, 0.3);
+        }
+
+        @keyframes tyFadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(24px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .thank-you-card {
+                animation: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .thank-you-page {
+                min-height: max(100svh, 150vw);
+                padding: clamp(120px, 20vw, 170px) 16px 120px;
+                background-size: 100% auto;
+            }
+            .thank-you-card {
+                border-radius: 20px;
+                padding: 30px 24px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .thank-you-page {
+                padding: clamp(105px, 22vw, 135px) 12px 100px;
+            }
+            .thank-you-card {
+                border-radius: 18px;
+                background: rgba(255, 255, 255, 0.96);
+                padding: 24px 20px;
+            }
+            .ty-support-actions {
+                grid-template-columns: 1fr;
+            }
+            .status-badge {
+                width: 100%;
+                font-size: 0.85rem;
+            }
+        }
+        
+        .error-message {
+            text-align: center;
+            color: var(--error);
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: 20px;
         }
     </style>
 </head>
 <body>
-    <div class="thank-you-page">
-        <div class="thank-you-card">
-            <div class="ty-header">
-                <h1>CẢM ƠN BẠN ĐÃ GỬI ĐĂNG KÝ!</h1>
-                <p>Ban tổ chức đã nhận được thông tin và hình ảnh thanh toán của bạn.</p>
-            </div>
-            
-            <div class="ty-body">
-                <div style="text-align: center;">
-                    <div class="status-badge">⏳ TRẠNG THÁI: CHỜ KIỂM TRA</div>
+    <main class="thank-you-page">
+        <div class="thank-you-card" aria-labelledby="tyTitle">
+            <!-- Content will be injected here if valid -->
+            <div id="tyContentWrapper">
+                <h1 id="tyTitle" class="ty-title">CẢM ƠN BẠN ĐÃ GỬI ĐĂNG KÝ!</h1>
+                <p class="ty-desc">Ban tổ chức đã nhận được thông tin và hình ảnh thanh toán của bạn.</p>
+                
+                <div class="ty-status-container">
+                    <div class="status-badge" role="status">
+                        <span>⏳ TRẠNG THÁI: CHỜ KIỂM TRA</span>
+                    </div>
                 </div>
 
                 <div class="info-box">
-                    <p style="margin-bottom: 10px;"><strong>Mã đăng ký:</strong> <span id="tyCode" class="highlight-text" style="color: var(--blue-sport); font-weight: bold;">Đang tải...</span></p>
-                    <p style="margin-bottom: 0;"><strong>Họ tên:</strong> <span id="tyName">...</span></p>
+                    <div class="info-row">
+                        <span class="info-label">Mã đăng ký</span>
+                        <span id="tyCode">Đang tải...</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Họ tên</span>
+                        <span id="tyName">...</span>
+                    </div>
                 </div>
 
-                <p style="text-align: center; margin-bottom: 20px; color: var(--navy-sub); line-height: 1.6;">
+                <p class="ty-notice">
                     Ban tổ chức sẽ đối chiếu giao dịch trong tài khoản ngân hàng và gửi kết quả đến Gmail bạn đã đăng ký.
                 </p>
 
-                <div style="background: #FEE2E2; padding: 15px; border-radius: 8px; font-size: 0.95rem; color: #991B1B; text-align: center; border: 1px dashed #F87171;">
+                <div class="ty-warning">
                     <strong>Lưu ý:</strong> Hình ảnh bill không đồng nghĩa với việc giao dịch đã được xác nhận hợp lệ.
                 </div>
-            </div>
 
-            <div class="ty-footer">
-                <button class="btn btn-primary btn-full" onclick="copyText('tyCode')">Sao chép mã đăng ký</button>
-                <a href="index.html" class="btn btn-outline btn-full" style="text-align: center;">Quay lại trang chủ</a>
-                <div style="display: flex; gap: 10px; margin-top: 10px;">
-                    <a href="#" id="tyFanpage" target="_blank" class="btn btn-outline" style="flex: 1; text-align: center; font-size: 0.9rem;">Liên hệ Fanpage</a>
-                    <button onclick="resendBill()" class="btn btn-outline" style="flex: 1; text-align: center; font-size: 0.9rem;">Gửi lại bill nếu cần</button>
+                <div class="ty-actions">
+                    <button type="button" class="btn-copy-code" onclick="copyCode()">SAO CHÉP MÃ ĐĂNG KÝ</button>
+                    <a href="/" class="btn-support" style="background: var(--ty-navy); color: white; border: none;">Quay lại trang chủ</a>
+                    
+                    <div class="ty-support-actions">
+                        <a href="#" id="tyFanpage" target="_blank" rel="noopener noreferrer" class="btn-support">Liên hệ Fanpage</a>
+                        <button type="button" onclick="resendBill()" class="btn-support">Gửi lại bill nếu cần</button>
+                    </div>
                 </div>
             </div>
+            
+            <div id="tyErrorWrapper" style="display: none;">
+                <div class="error-message">Không tìm thấy mã đăng ký!</div>
+                <p class="ty-desc" style="margin-bottom: 30px;">Vui lòng kiểm tra lại đường dẫn hoặc đăng ký mới.</p>
+                <a href="/" class="btn-support" style="background: var(--ty-navy); color: white; border: none; width: 100%;">Quay lại trang chủ</a>
+            </div>
         </div>
-    </div>
+    </main>
 
     <!-- Toast Notification cho thao tác Copy -->
-    <div id="toast" class="toast">Đã copy thành công!</div>
+    <div id="toast" class="toast" role="status" aria-live="polite">Đã sao chép mã đăng ký</div>
 
     <script src="assets/js/config.js"></script>
     <script>
         document.addEventListener("DOMContentLoaded", () => {
             const urlParams = new URLSearchParams(window.location.search);
             const code = urlParams.get('code');
+            const wrapper = document.getElementById('tyContentWrapper');
+            const errorWrapper = document.getElementById('tyErrorWrapper');
             
             if (!code) {
-                alert("Không tìm thấy mã đăng ký!");
-                window.location.href = 'index.html';
+                wrapper.style.display = 'none';
+                errorWrapper.style.display = 'block';
                 return;
             }
 
             // Gán dữ liệu từ config
-            document.getElementById('tyFanpage').href = CONFIG.FACEBOOK_URL;
+            const fanpageBtn = document.getElementById('tyFanpage');
+            if (fanpageBtn) {
+                fanpageBtn.href = CONFIG.FACEBOOK_URL;
+            }
 
             // Đọc dữ liệu tạm từ localStorage
             const localDataStr = localStorage.getItem('bcns_registration');
+            let foundName = "Không có sẵn";
+            let displayCode = code;
+
             if (localDataStr) {
                 try {
                     const data = JSON.parse(localDataStr);
-                    if (data.code === code) {
-                        document.getElementById('tyCode').textContent = data.code;
-                        document.getElementById('tyName').textContent = data.fullname || "Không có sẵn";
-                    } else {
-                        document.getElementById('tyCode').textContent = code;
-                        document.getElementById('tyName').textContent = "Không có sẵn";
+                    // Match either code or registrationCode
+                    if (data.code === code || data.registrationCode === code) {
+                        foundName = data.fullname || data.name || "Không có sẵn";
                     }
                 } catch(e) {
-                    document.getElementById('tyCode').textContent = code;
+                    console.error("Lỗi đọc dữ liệu localStorage:", e);
                 }
-            } else {
-                document.getElementById('tyCode').textContent = code;
             }
+            
+            document.getElementById('tyCode').textContent = displayCode;
+            document.getElementById('tyName').textContent = foundName;
         });
 
-        function copyText(elementId) {
-            let text = document.getElementById(elementId).textContent;
-            navigator.clipboard.writeText(text).then(() => {
+        function copyCode() {
+            const text = document.getElementById('tyCode').textContent;
+            
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(text).then(showToast).catch(err => {
+                    fallbackCopyTextToClipboard(text);
+                });
+            } else {
+                fallbackCopyTextToClipboard(text);
+            }
+        }
+        
+        function fallbackCopyTextToClipboard(text) {
+            const textArea = document.createElement("textarea");
+            textArea.value = text;
+            textArea.style.position = "fixed";
+            textArea.style.left = "-999999px";
+            textArea.style.top = "-999999px";
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            try {
+                document.execCommand('copy');
                 showToast();
-            }).catch(err => {
+            } catch (err) {
                 console.error('Không thể copy: ', err);
-            });
+                alert("Không thể sao chép, vui lòng bôi đen và sao chép thủ công.");
+            }
+            document.body.removeChild(textArea);
         }
 
         function showToast() {
             const toast = document.getElementById('toast');
+            if (!toast) return;
             toast.classList.add('show');
             setTimeout(() => {
                 toast.classList.remove('show');
-            }, 2000);
+            }, 3000);
         }
 
         function resendBill() {
-            // Chuyển hướng người dùng về trang chủ nhưng giả lập trạng thái upload bill
-            // Để đơn giản, chỉ cần chuyển về index.html và báo họ có thể đăng ký lại form nhanh nhờ autosave
-            // Tuy nhiên, vì localStorage.bcns_registration vẫn còn code (tôi chưa xóa nó đi sau khi submit bill ở bước này? À, trong payment-proof.js tôi có xóa 'bcns_form_draft' nhưng KHÔNG xóa 'bcns_registration'!)
-            
-            // Xóa form_draft đi
             localStorage.removeItem('bcns_form_draft');
-            // Cứ quay về index và có thông báo tạm
-            alert("Bạn hãy tải lại trang chủ, điền lại đúng số điện thoại và Gmail để hệ thống bỏ qua bước form và cấp lại luồng upload bill nhé (nếu bạn cần).");
+            // Cải thiện thông báo thân thiện
+            alert("Hệ thống sẽ đưa bạn về trang chủ. Bạn chỉ cần nhập lại Số điện thoại & Email đã đăng ký để hệ thống nhận diện và bỏ qua bước điền thông tin, cho phép upload lại bill nhé.");
             window.location.href = 'index.html';
         }
     </script>

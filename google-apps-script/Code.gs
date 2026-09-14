@@ -59,6 +59,18 @@ function getConfig() {
   return PropertiesService.getScriptProperties().getProperties();
 }
 
+function normalizeEmail(value) {
+  return String(value || "").trim().toLowerCase().replace(/\s+/g, "");
+}
+
+function isValidEmail(email) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email);
+}
+
+function escapeFormulaText_(value) {
+  return String(value || "").replace(/"/g, '""');
+}
+
 function getDriveAccessHelp_(error) {
   return [
     "DriveApp bị từ chối quyền.",
@@ -129,6 +141,12 @@ function submitFullRegistration(data) {
       return { success: false, message: "Thiếu thông tin bắt buộc hoặc ảnh hóa đơn." };
     }
     
+    var normalizedEmail = normalizeEmail(data.email);
+    if (!isValidEmail(normalizedEmail)) {
+      return { success: false, message: "Địa chỉ email không hợp lệ: " + normalizedEmail };
+    }
+    data.email = normalizedEmail;
+
     var folderId = normalizeDriveFolderId(conf.DRIVE_FOLDER_ID);
     var timeStr = Utilities.formatDate(new Date(), "GMT+7", "yyyyMMdd-HHmmss");
     var safeName = String(data.fullname || "RUNNER")
@@ -169,22 +187,14 @@ function submitFullRegistration(data) {
     sheet.appendRow(newRow);
     var appendedRow = sheet.getLastRow();
 
-    // Hiển thị bill ngay trên Sheet mà không công khai file Drive.
-    // Nếu chèn preview lỗi, dữ liệu đăng ký vẫn được giữ và cột P có link dự phòng.
+    // Link MỞ BILL ổn định, không phụ thuộc ảnh xem trước.
     var previewWarning = "";
-    try {
-      sheet.setRowHeight(appendedRow, 130);
-      sheet.setColumnWidth(16, 200);
-      var preview = sheet.insertImage(blob, 16, appendedRow);
-      preview.setWidth(180).setHeight(120);
-    } catch (previewError) {
-      var privateViewUrl = "https://drive.google.com/file/d/" + fileId + "/view";
-      sheet.getRange(appendedRow, 16).setFormula(
-        '=HYPERLINK("' + privateViewUrl + '","Mở hóa đơn")'
-      );
-      previewWarning = "Bill đã lưu; không chèn được ảnh xem trước.";
-      Logger.log(previewWarning + " " + previewError);
-    }
+    var privateViewUrl = "https://drive.google.com/file/d/" + fileId + "/view";
+    var billCell = sheet.getRange(appendedRow, 16);
+    billCell.setFormula('=HYPERLINK("' + escapeFormulaText_(privateViewUrl) + '","MỞ BILL")');
+    billCell.setHorizontalAlignment("center").setVerticalAlignment("middle")
+      .setFontWeight("bold").setFontColor("#2563EB");
+    sheet.setRowHeight(appendedRow, 42);
     SpreadsheetApp.flush();
 
     return {
@@ -237,7 +247,7 @@ function handleStatusChange(e) {
 
 function processApproved(sheet, row, conf) {
   var rowData = sheet.getRange(row, 1, 1, 23).getValues()[0];
-  var email = rowData[6];
+  var email = normalizeEmail(rowData[6]);
   var lastEmailType = rowData[20]; // Cột U
   
   if (!email) return;
@@ -260,7 +270,7 @@ function processApproved(sheet, row, conf) {
 function processRejected(sheet, row, conf) {
   var rowData = sheet.getRange(row, 1, 1, 23).getValues()[0];
   var reason = rowData[17]; // Cột R
-  var email = rowData[6];
+  var email = normalizeEmail(rowData[6]);
   
   if (!reason || reason.toString().trim() === "") {
     SpreadsheetApp.getUi().alert("Bắt buộc phải nhập 'Lý do không hợp lệ' (Cột R) trước khi chọn KHÔNG HỢP LỆ.");
@@ -290,10 +300,14 @@ function processRejected(sheet, row, conf) {
 function sendApprovedEmail(rowData, conf) {
   var code = rowData[1];
   var fullname = rowData[2];
-  var email = rowData[6];
+  var email = normalizeEmail(rowData[6]);
   var distance = rowData[8];
   var size = rowData[9];
   var fee = rowData[12];
+  if (!isValidEmail(email)) {
+    Logger.log("Email không hợp lệ: " + email);
+    return false;
+  }
   
   var subject = "[BCNS 2026] Xác nhận đăng ký thành công – " + code;
   
@@ -339,19 +353,27 @@ function sendApprovedEmail(rowData, conf) {
   var textBody = `Xin chào ${fullname},\n\nChúc mừng bạn đã đăng ký thành công chương trình BƯỚC CHẠY NHỊP SỐNG.\nBan tổ chức đã kiểm tra và xác nhận thông tin thanh toán của bạn là hợp lệ.\n\nMã đăng ký: ${code}\nCự ly: ${distance}\nTrạng thái: ĐÃ XÁC NHẬN\n\nTrân trọng,\nBAN TỔ CHỨC`;
   
   try {
-    MailApp.sendEmail({ to: email, subject: subject, body: textBody, htmlBody: htmlBody });
+    MailApp.sendEmail({
+      to: email, subject: subject, body: textBody, htmlBody: htmlBody,
+      name: "BƯỚC CHẠY NHỊP SỐNG", replyTo: conf.SUPPORT_EMAIL
+    });
     return true;
   } catch (e) {
-    Logger.log(e); return false;
+    Logger.log("Không gửi được email đến " + email + ": " + e.toString());
+    return false;
   }
 }
 
 function sendRejectedEmail(rowData, conf) {
   var code = rowData[1];
   var fullname = rowData[2];
-  var email = rowData[6];
+  var email = normalizeEmail(rowData[6]);
   var distance = rowData[8];
   var reason = rowData[17];
+  if (!isValidEmail(email)) {
+    Logger.log("Email không hợp lệ: " + email);
+    return false;
+  }
   
   var subject = "[BCNS 2026] Cần kiểm tra lại thanh toán – " + code;
   
@@ -386,16 +408,44 @@ function sendRejectedEmail(rowData, conf) {
   var textBody = `Xin chào ${fullname},\n\nBan tổ chức đã kiểm tra thông tin. Hiện tại chúng tôi chưa thể xác nhận đăng ký vì:\n${reason}\n\nVui lòng liên hệ Fanpage để được hỗ trợ.\nKhông thực hiện chuyển khoản lại khi chưa trao đổi với Ban tổ chức.\n\nTrân trọng,\nBAN TỔ CHỨC`;
   
   try {
-    MailApp.sendEmail({ to: email, subject: subject, body: textBody, htmlBody: htmlBody });
+    MailApp.sendEmail({
+      to: email, subject: subject, body: textBody, htmlBody: htmlBody,
+      name: "BƯỚC CHẠY NHỊP SỐNG", replyTo: conf.SUPPORT_EMAIL
+    });
     return true;
   } catch (e) {
-    Logger.log(e); return false;
+    Logger.log("Không gửi được email đến " + email + ": " + e.toString());
+    return false;
   }
 }
 
 // =====================================================================================
 // 4. MENU QUẢN TRỊ TRÊN GOOGLE SHEETS
 // =====================================================================================
+function setupStatusColors() {
+  var conf = getConfig();
+  var sheet = SpreadsheetApp.openById(conf.SPREADSHEET_ID)
+    .getSheetByName(conf.SHEET_NAME || "DANG_KY_BCNS");
+  if (!sheet) throw new Error("Không tìm thấy Sheet.");
+
+  var range = sheet.getRange("Q2:Q");
+  var successRule = SpreadsheetApp.newConditionalFormatRule()
+    .whenTextEqualTo("THANH TOÁN THÀNH CÔNG")
+    .setBackground("#DCFCE7").setFontColor("#166534").setBold(true)
+    .setRanges([range]).build();
+  var failedRule = SpreadsheetApp.newConditionalFormatRule()
+    .whenTextEqualTo("THANH TOÁN THẤT BẠI")
+    .setBackground("#FEE2E2").setFontColor("#991B1B").setBold(true)
+    .setRanges([range]).build();
+
+  var rules = sheet.getConditionalFormatRules().filter(function(rule) {
+    return !rule.getRanges().some(function(r) { return r.getColumn() === 17; });
+  });
+  rules.push(successRule, failedRule);
+  sheet.setConditionalFormatRules(rules);
+  Logger.log("Đã thiết lập màu trạng thái.");
+}
+
 function setupStatusTrigger() {
   var conf = getConfig();
   ScriptApp.getProjectTriggers().forEach(function(trigger) {

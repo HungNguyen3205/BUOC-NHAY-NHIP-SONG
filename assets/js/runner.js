@@ -1,85 +1,142 @@
-
 const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
 
-function getScrollProgress() {
-    const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
-    if (maxScroll <= 0) return 0;
-    return clamp(window.scrollY / maxScroll, 0, 1);
+const inverseLerp = (value, min, max) => clamp((value - min) / (max - min), 0, 1);
+
+function getIntroProgress(section) {
+    const rect = section.getBoundingClientRect();
+    const scrollable = Math.max(section.offsetHeight - window.innerHeight, 1);
+    return clamp(-rect.top / scrollable, 0, 1);
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-    const video = document.getElementById("runnerVideo");
-    const hero = document.getElementById("hero");
-    const poster = document.querySelector(".runner-poster");
-    const energy = document.querySelector(".runner-energy");
-
-    if (!video || !hero) return;
+    const introSection = document.getElementById("introVideo");
+    const video = document.getElementById("introRunnerVideo");
+    const brand = document.querySelector(".intro-brand");
+    const overlay = document.querySelector(".intro-video-overlay");
+    const skipBtn = document.getElementById("introSkipButton");
+    const scrollIndicator = document.querySelector(".intro-scroll");
+    
+    if (!introSection || !video) return;
 
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-    if (reduceMotion) {
-        video.pause();
-        video.hidden = true;
-        if (poster) {
-            poster.classList.add("is-visible");
-        }
-        return;
-    }
-
-    const playVideo = () => {
-        video.play().then(() => {
-            video.classList.add("is-ready");
-            if (poster) {
-                poster.classList.add("is-hidden");
-            }
-        }).catch(() => {
-            // Auto-play was prevented or error
-            video.classList.add("is-ready"); // We can still try to show it in case controls are needed, but it's muted so should play
-            if (poster) {
-                poster.classList.add("is-visible");
+    // Handle skip
+    if (skipBtn) {
+        skipBtn.addEventListener("click", () => {
+            const hero = document.getElementById("hero");
+            if (hero) {
+                hero.scrollIntoView({
+                    behavior: reduceMotion ? "auto" : "smooth",
+                    block: "start"
+                });
             }
         });
-    };
-
-    if (video.readyState >= 3) {
-        playVideo();
-    } else {
-        video.addEventListener("canplay", playVideo);
     }
 
-    video.addEventListener("error", () => {
-        video.hidden = true;
-        if (poster) {
-            poster.classList.add("is-visible");
-        }
-    });
+    // Attempt video playback
+    if (!reduceMotion) {
+        const playVideo = async () => {
+            try {
+                await video.play();
+                video.hidden = false;
+            } catch (error) {
+                console.warn("Không thể tự động phát video intro:", error);
+                video.hidden = true;
+            }
+        };
 
-    // Scroll animation for subtle parallax
+        if (video.readyState >= 3) {
+            playVideo();
+        } else {
+            video.addEventListener("canplay", playVideo);
+        }
+
+        video.addEventListener("error", () => {
+            console.error("Lỗi tải video intro.");
+            video.hidden = true;
+        });
+    } else {
+        video.pause();
+        video.hidden = true;
+    }
+
+    // Scroll Logic
     let isTicking = false;
+
     window.addEventListener("scroll", () => {
         if (!isTicking) {
             window.requestAnimationFrame(() => {
-                const progress = getScrollProgress();
+                const progress = getIntroProgress(introSection);
                 
-                // Subtle zoom for video
-                const scale = 1 + (progress * 0.04);
+                if (reduceMotion) {
+                    if (progress > 0.1) {
+                        document.body.classList.remove("is-intro-active");
+                        document.body.classList.add("is-intro-complete");
+                    } else {
+                        document.body.classList.add("is-intro-active");
+                        document.body.classList.remove("is-intro-complete");
+                    }
+                    isTicking = false;
+                    return;
+                }
+
+                // Video scale: 1 -> 0.94
+                const scale = 1 - (progress * 0.06);
                 
-                // Subtle translation for energy
-                const energyY = progress * 50; 
-                const energyX = progress * -20;
-                
-                if (video.classList.contains("is-ready")) {
+                // Video opacity: 1 up to 0.65, then down to 0
+                const videoOpacityProgress = inverseLerp(progress, 0.65, 1);
+                const videoOpacity = 1 - videoOpacityProgress;
+
+                // Brand opacity: 1 down to 0 between 0.25 and 0.65
+                const brandOpacityProgress = inverseLerp(progress, 0.25, 0.65);
+                const brandOpacity = 1 - brandOpacityProgress;
+
+                // Brand translateY: -50% to -65%
+                const brandY = -50 - (progress * 15);
+
+                // Video border-radius: 0 to 28px near end
+                const borderRadiusProgress = inverseLerp(progress, 0.5, 1);
+                const borderRadius = borderRadiusProgress * 28;
+
+                // Scroll indicator opacity
+                const scrollIndicatorOpacity = 1 - inverseLerp(progress, 0, 0.1);
+
+                if (video) {
                     video.style.transform = `scale(${scale})`;
+                    video.style.opacity = videoOpacity;
+                    video.style.borderRadius = `${borderRadius}px`;
                 }
-                
-                if (energy) {
-                    energy.style.transform = `translate3d(${energyX}px, ${energyY}px, 0)`;
+
+                if (brand) {
+                    brand.style.transform = `translateY(${brandY}%)`;
+                    brand.style.opacity = brandOpacity;
                 }
-                
+
+                if (scrollIndicator) {
+                    scrollIndicator.style.opacity = scrollIndicatorOpacity;
+                    scrollIndicator.style.pointerEvents = scrollIndicatorOpacity === 0 ? "none" : "auto";
+                }
+
+                // Toggle header visibility classes
+                if (progress >= 0.95) {
+                    document.body.classList.remove("is-intro-active");
+                    document.body.classList.add("is-intro-complete");
+                } else {
+                    document.body.classList.add("is-intro-active");
+                    document.body.classList.remove("is-intro-complete");
+                    
+                    // If we scroll back up, ensure it plays if possible
+                    if (progress < 0.1 && video.paused && !reduceMotion) {
+                        video.play().catch(() => {});
+                    }
+                }
+
                 isTicking = false;
             });
             isTicking = true;
         }
     }, { passive: true });
+    
+    // Initial call to set initial states
+    window.dispatchEvent(new Event('scroll'));
 });
-

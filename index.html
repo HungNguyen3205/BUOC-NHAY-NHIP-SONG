@@ -22,10 +22,69 @@
         <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="assets/css/style.css">
     </head>
-    <body>
+    <body class="is-intro-active">
+        <!-- MÀN HÌNH INTRO FULL SCREEN -->
+        <section
+            id="introVideo"
+            class="intro-video-section"
+            aria-label="Video giới thiệu Bước Chạy Nhịp Sống"
+        >
+            <div class="intro-video-sticky">
+                <video
+                    id="introRunnerVideo"
+                    class="intro-runner-video"
+                    autoplay
+                    muted
+                    playsinline
+                    preload="metadata"
+                    poster="./assets/images/runner-poster.webp"
+                >
+                    <source
+                        src="./assets/video/banner.mp4"
+                        type="video/mp4"
+                    >
+                </video>
+
+
+
+                <!-- <div class="intro-brand">
+                    <span class="intro-eyebrow">
+                        ĐÀ NẴNG · 27.09.2026
+                    </span>
+
+                    <h1 class="intro-title">
+                        BƯỚC CHẠY<br>
+                        NHỊP SỐNG
+                    </h1>
+
+                    <p class="intro-slogan">
+                        Bền từng bước — Khỏe từng nhịp
+                    </p>
+                </div> -->
+
+                <button
+                    type="button"
+                    class="intro-skip"
+                    id="introSkipButton"
+                    aria-label="Bỏ qua video giới thiệu"
+                >
+                    BỎ QUA
+                </button>
+
+                <a
+                    href="#hero"
+                    class="intro-scroll"
+                    aria-label="Cuộn xuống để khám phá"
+                >
+                    <span>CUỘN ĐỂ BẮT ĐẦU</span>
+                    <span class="intro-scroll-icon" aria-hidden="true"></span>
+                </a>
+            </div>
+        </section>
+
         <!-- HEADER -->
         <header id="header">
-            <div class="container header-container">
+            <div class="container header-container ">
                 <div class="logo">
                     <span class="logo-text">BƯỚC CHẠY NHỊP SỐNG</span>
                 </div>
@@ -84,16 +143,15 @@
                 </div>
                 
                 <div class="hero-image-right">
-                    <div class="runner-visual" aria-hidden="true">
-                        <picture class="runner-poster">
-                            <source srcset="./assets/images/runner-poster.webp" type="image/webp">
-                            <img src="./assets/images/banner.png" alt="" width="1920" height="1080">
-                        </picture>
-                        <video id="runnerVideo" class="runner-video" autoplay muted playsinline loop preload="auto" poster="./assets/images/runner-poster.webp">
-                            <source src="./assets/video/banner.mp4" type="video/mp4">
-                        </video>
-                        <div class="runner-energy"></div>
-                    </div>
+                    <img
+                        src="./assets/images/banner.png"
+                        alt="Bước Chạy Nhịp Sống Marathon tại Đà Nẵng"
+                        id="heroRightImage"
+                        width="3840"
+                        height="2160"
+                        loading="eager"
+                        decoding="async"
+                    >
                 </div>
             </div>
         </section>
@@ -535,8 +593,9 @@
         <!-- Toast Notification cho thao tác Copy -->
         <div id="toast" class="toast">Đã copy thành công!</div>
 
-        <script src="assets/js/config.js"></script>
-        <script src="assets/js/registration.js"></script>
-        <script src="assets/js/payment-proof.js"></script>
+        <script src="./assets/js/config.js"></script>
+        <script src="./assets/js/registration.js"></script>
+        <script src="./assets/js/payment-proof.js"></script>
+        <script src="./assets/js/runner.js"></script>
     </body>
     </html>

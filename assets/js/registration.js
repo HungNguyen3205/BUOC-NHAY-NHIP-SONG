@@ -66,6 +66,24 @@ function updateFee() {
     }
 }
 
+function preloadPaymentQr(distance) {
+    const qrUrl = CONFIG.FIXED_QR[distance];
+    if (!qrUrl) return;
+    const image = new Image();
+    image.src = qrUrl;
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    const distanceSelect = document.getElementById("distance-select");
+    if (distanceSelect) {
+        // Remove the inline onchange from HTML if any, but since we can't be sure, we just add listener
+        distanceSelect.addEventListener("change", event => {
+            updateFee();
+            preloadPaymentQr(event.target.value);
+        });
+    }
+});
+
 const phoneRegex = /^(0[3|5|7|8|9])+([0-9]{8})$/;
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const typoDomains = ['gmai.com', 'gmial.com', 'gmal.com', 'gmail.con', 'gmail.co'];
@@ -269,7 +287,13 @@ function submitRegistration() {
     // Định dạng mã theo yêu cầu: BCNS-260927-XXXXXX
     const dateStr = CONFIG.EVENT_DATE ? CONFIG.EVENT_DATE.replace(/\//g, "").slice(0, 6) : "260927";
     const code = `BCNS-${dateStr}-${shortPhone}${randomStr}`;
-    const transferContent = `BCNS ${shortPhone} ${randomStr}`;
+    
+    const distanceValue = pendingFormData.distanceVal;
+    const transferContent = CONFIG.FIXED_TRANSFER_CONTENT[distanceValue];
+    
+    if (!transferContent) {
+        console.error("Không xác định được nội dung chuyển khoản");
+    }
     
     // Cập nhật thêm code và transferContent vào formData để dùng ở bước sau
     pendingFormData.code = code;
@@ -294,10 +318,31 @@ function submitRegistration() {
     document.getElementById('paymentFee').textContent = new Intl.NumberFormat('vi-VN').format(pendingFormData.fee) + ' VNĐ';
     document.getElementById('paymentTransferContent').textContent = transferContent;
     
-    // Xử lý QR VietQR Động
+    // Xử lý QR VietQR Cố Định
     const qrImg = document.getElementById('paymentQrImage');
-    const bankCode = CONFIG.BANK_NAME.split(' ')[0].toLowerCase(); // Lấy chữ cái đầu tiên làm bank code, vd MB Bank -> mb
-    qrImg.src = `https://img.vietqr.io/image/${bankCode}-${CONFIG.BANK_ACCOUNT}-compact2.png?amount=${pendingFormData.fee}&addInfo=${encodeURIComponent(transferContent)}&accountName=${encodeURIComponent(CONFIG.ACCOUNT_NAME)}`;
+    const distValue = pendingFormData.distanceVal;
+
+    if (!qrImg) {
+        console.error("Không tìm thấy vùng hiển thị QR thanh toán");
+    }
+
+    if (!CONFIG.FIXED_QR[distValue]) {
+        console.error("Không tìm thấy mã QR cho cự ly đã chọn");
+    }
+
+    qrImg.src = CONFIG.FIXED_QR[distValue];
+    qrImg.alt = `QR thanh toán ${distValue.toUpperCase()} - ${new Intl.NumberFormat("vi-VN").format(CONFIG.FEES[distValue])} VNĐ`;
+
+    qrImg.onload = () => {
+        qrImg.classList.add("is-loaded");
+        qrImg.classList.remove("has-error");
+    };
+
+    qrImg.onerror = () => {
+        qrImg.classList.remove("is-loaded");
+        qrImg.classList.add("has-error");
+        console.error("Không thể tải VietQR cho cự ly:", distValue);
+    };
     
     closeConfirmModal();
     

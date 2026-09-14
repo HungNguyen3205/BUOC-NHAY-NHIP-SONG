@@ -253,6 +253,7 @@ function closeConfirmModal() {
 }
 
 // Xử lý gửi dữ liệu thật (Chỉ sinh Code Offline, không gọi API ở bước này)
+// Xử lý gửi dữ liệu thật (Chỉ sinh Code Offline, không gọi API ở bước này)
 function submitRegistration() {
     if (!pendingFormData) return;
     
@@ -286,19 +287,17 @@ function submitRegistration() {
     
     // Render thông tin thanh toán
     document.getElementById('paymentCode').textContent = code;
+    document.getElementById('paymentDistance').textContent = pendingFormData.distance;
     document.getElementById('paymentBankName').textContent = CONFIG.BANK_NAME;
     document.getElementById('paymentAccountName').textContent = CONFIG.ACCOUNT_NAME;
     document.getElementById('paymentBankAccount').textContent = CONFIG.BANK_ACCOUNT;
     document.getElementById('paymentFee').textContent = new Intl.NumberFormat('vi-VN').format(pendingFormData.fee) + ' VNĐ';
     document.getElementById('paymentTransferContent').textContent = transferContent;
     
-    // Xử lý QR
+    // Xử lý QR VietQR Động
     const qrImg = document.getElementById('paymentQrImage');
-    if (CONFIG.BANK_NAME.toLowerCase().includes('vietcombank') || CONFIG.BANK_NAME.toLowerCase().includes('vcb')) {
-        qrImg.src = `https://img.vietqr.io/image/vcb-${CONFIG.BANK_ACCOUNT}-compact2.png?amount=${pendingFormData.fee}&addInfo=${encodeURIComponent(transferContent)}&accountName=${encodeURIComponent(CONFIG.ACCOUNT_NAME)}`;
-    } else {
-        qrImg.src = CONFIG.QR_IMAGE;
-    }
+    const bankCode = CONFIG.BANK_NAME.split(' ')[0].toLowerCase(); // Lấy chữ cái đầu tiên làm bank code, vd MB Bank -> mb
+    qrImg.src = `https://img.vietqr.io/image/${bankCode}-${CONFIG.BANK_ACCOUNT}-compact2.png?amount=${pendingFormData.fee}&addInfo=${encodeURIComponent(transferContent)}&accountName=${encodeURIComponent(CONFIG.ACCOUNT_NAME)}`;
     
     closeConfirmModal();
     
@@ -309,7 +308,7 @@ function submitRegistration() {
 }
 
 // ==========================================================================
-// SPA NAVIGATION (CHUYỂN TRANG KHÔNG TẢI LẠI)
+// SPA NAVIGATION & FOOTER SYNC
 // ==========================================================================
 document.addEventListener("DOMContentLoaded", () => {
     const btnShowUploadSection = document.getElementById('btnShowUploadSection');
@@ -318,5 +317,22 @@ document.addEventListener("DOMContentLoaded", () => {
             document.getElementById('paymentSection').style.display = 'none';
             document.getElementById('uploadSection').style.display = 'block';
         });
+    }
+
+    // Sync Footer Contacts from CONFIG
+    const footerEmail = document.getElementById('footerEmail');
+    const footerPhone = document.getElementById('footerPhone');
+    const footerFacebook = document.getElementById('footerFacebook');
+
+    if (footerEmail && CONFIG.SUPPORT_EMAIL) {
+        footerEmail.textContent = CONFIG.SUPPORT_EMAIL;
+        footerEmail.href = `mailto:${CONFIG.SUPPORT_EMAIL}`;
+    }
+    if (footerPhone && CONFIG.SUPPORT_PHONE) {
+        footerPhone.textContent = CONFIG.SUPPORT_PHONE;
+        footerPhone.href = `tel:${CONFIG.SUPPORT_PHONE}`;
+    }
+    if (footerFacebook && CONFIG.FACEBOOK_URL) {
+        footerFacebook.href = CONFIG.FACEBOOK_URL;
     }
 });

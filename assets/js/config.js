@@ -16,9 +16,7 @@ const CONFIG = {
     FACEBOOK_URL: "https://www.facebook.com/profile.php?id=61593697175095",
 
     FEES: {
-        "3km": 150000,
-        "5km": 250000,
-        "7 VÒNG": 0,
-        "12 VÒNG": 0
+        "3km": 99000,
+        "5km": 149000
     }
 };

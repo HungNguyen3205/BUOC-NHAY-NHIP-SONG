@@ -5,6 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BƯỚC CHẠY NHỊP SỐNG - Đăng Ký Giải Chạy</title>
     <meta name="description" content="Đăng ký tham gia giải chạy cộng đồng BƯỚC CHẠY NHỊP SỐNG tại Đà Nẵng. Bền từng bước - Khỏe từng nhịp.">
+    
+    <!-- SEO & Open Graph -->
+    <meta property="og:title" content="BƯỚC CHẠY NHỊP SỐNG - Đăng Ký Giải Chạy">
+    <meta property="og:description" content="Đăng ký tham gia giải chạy cộng đồng BƯỚC CHẠY NHỊP SỐNG tại Đà Nẵng. Bền từng bước - Khỏe từng nhịp.">
+    <meta property="og:image" content="./images/banner.png">
+    <meta property="og:url" content="https://buoc-nhay-nhip-song.vercel.app/">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+    
+    <link rel="canonical" href="https://buoc-nhay-nhip-song.vercel.app/">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -53,19 +65,15 @@
                 <div class="hero-info dark-text">
                     <div class="info-item">
                         <span class="info-label">Thời gian</span>
-                        <span class="info-value">05:00 – 09:20 | 27/09/2026</span>
+                        <span class="info-value">05:00 – 08:00 | 27/09/2026</span>
                     </div>
                     <div class="info-item">
                         <span class="info-label">Địa điểm</span>
-                        <span class="info-value">Ngũ Hành Sơn, Đà Nẵng</span>
+                        <span class="info-value">Đà Nẵng</span>
                     </div>
                     <div class="info-item">
                         <span class="info-label">Cự ly</span>
                         <span class="info-value">3KM & 5KM</span>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">Mở đơn</span>
-                        <span class="info-value">06/09/2026 - 16/09/2026</span>
                     </div>
                 </div>
 
@@ -76,7 +84,7 @@
             </div>
             <div class="hero-image-right">
                 <!-- Chèn ảnh khung bên phải của bạn vào đây (hero-banner.png) -->
-                <img src="./images/banner.png" alt="Banner Bước Chạy Nhịp Sống" id="heroRightImage">
+                <img src="./assets/images/banner.png" alt="Banner Bước Chạy Nhịp Sống" id="heroRightImage">
             </div>
         </div>
     </section>
@@ -97,15 +105,15 @@
         </div>
     </section>
 
-    <!-- TRƯNG BÀY VẬT PHẨM & ĐỘI NGŨ -->
+    <!-- TRƯNG BÀY VẬT PHẨM -->
     <section id="showcase" class="showcase py-section">
         <div class="container fade-up">
             <h2 class="section-title text-center">Nổi Bật Tại Giải Chạy</h2>
-            <div class="showcase-grid">
+            <div class="showcase-single">
                 <!-- Áo chạy -->
-                <div class="showcase-card">
+                <div class="showcase-card showcase-card-large">
                     <div class="showcase-image-wrapper">
-                        <img src="images/aochay.jpg" alt="Áo thi đấu chính thức" class="showcase-img">
+                        <img src="./assets/images/ao.png" alt="Áo thi đấu chính thức" class="showcase-img" loading="lazy" width="600" height="600">
                         <div class="showcase-badge">Vật phẩm</div>
                     </div>
                     <div class="showcase-content">
@@ -113,24 +121,55 @@
                         <p>Thiết kế năng động, chất liệu thể thao cao cấp siêu nhẹ và thoáng khí, giúp vận động viên bứt phá mọi giới hạn trên đường chạy.</p>
                     </div>
                 </div>
-                
-                <!-- Đội ngũ -->
-                <div class="showcase-card">
-                    <div class="showcase-image-wrapper">
-                        <img src="images/doingu.jpg" alt="Đội ngũ ban tổ chức" class="showcase-img">
-                        <div class="showcase-badge team-badge">Đội ngũ</div>
-                    </div>
-                    <div class="showcase-content">
-                        <h3>Đội Ngũ Đồng Hành</h3>
-                        <p>Được tổ chức bởi những người đam mê thể thao và đội ngũ y tế chuyên nghiệp, đảm bảo trải nghiệm an toàn và bùng nổ nhất cho bạn.</p>
-                    </div>
-                </div>
             </div>
         </div>
     </section>
 
+    <!-- ĐỘI NGŨ TỔ CHỨC -->
+    <section class="team-section">
+        <div class="team-container">
+            <div class="team-heading">
+                <span>NHỮNG NGƯỜI ĐỨNG SAU ĐƯỜNG CHẠY</span>
+                <h2>ĐỘI NGŨ TỔ CHỨC</h2>
+            </div>
+
+            <article class="team-showcase">
+                <div class="team-image">
+                    <img
+                        src="./assets/images/team-bcns-4k.png"
+                        alt="Đội ngũ tổ chức Bước Chạy Nhịp Sống"
+                        width="3840"
+                        height="2160"
+                        loading="lazy"
+                        decoding="async"
+                    >
+                </div>
+
+                <div class="team-content">
+                    <div class="team-copy">
+                        <p class="team-label">ĐỘI NGŨ ĐỒNG HÀNH</p>
+                        <h3>Đồng hành cùng từng bước chạy của bạn</h3>
+                        <p class="team-description">
+                            Được tổ chức bởi những người đam mê thể thao,
+                            kết hợp cùng đội ngũ y tế chuyên nghiệp và tình
+                            nguyện viên tận tâm. Chúng tôi đặt sự an toàn và
+                            trải nghiệm của vận động viên lên hàng đầu, cam
+                            kết mang đến một giải chạy bùng nổ, chuyên nghiệp
+                            và đầy kỷ niệm.
+                        </p>
+                    </div>
+
+                    <div class="team-badge" aria-label="BCNS Đà Nẵng 2026">
+                        <strong>BCNS</strong>
+                        <span>Đà Nẵng 2026</span>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </section>
+
     <!-- LỊCH TRÌNH -->
-    <section id="schedule" class="schedule py-section bg-alt">
+    <section id="schedule" class="schedule py-section">
         <div class="container fade-up">
             <h2 class="section-title text-center">Lịch Trình Sự Kiện</h2>
             <div class="timeline">
@@ -173,7 +212,7 @@
                     <div class="card-body">
                         <ul class="card-features">
                             <li><strong>Phù hợp:</strong> Người mới bắt đầu chạy, rèn luyện nhẹ nhàng</li>
-                            <li><strong>Lệ phí:</strong> 150.000 VNĐ</li>
+                            <li><strong>Lệ phí:</strong> 99.000 VNĐ</li>
                             <li><strong>Quyền lợi:</strong> Áo thi đấu chính thức, số BIB tham gia, Huy chương kỷ niệm</li>
                         </ul>
                         <button class="btn btn-outline btn-full" onclick="selectDistance('3km')">Chọn cự ly này</button>
@@ -189,7 +228,7 @@
                     <div class="card-body">
                         <ul class="card-features">
                             <li><strong>Phù hợp:</strong> Người đã có kinh nghiệm, bứt phá bản thân</li>
-                            <li><strong>Lệ phí:</strong> 250.000 VNĐ</li>
+                            <li><strong>Lệ phí:</strong> 149.000 VNĐ</li>
                             <li><strong>Quyền lợi:</strong> Áo thi đấu chính thức, số BIB tham gia, Huy chương kỷ niệm, Giải thưởng hấp dẫn dành cho VĐV chiến thắng</li>
                         </ul>
                         <button class="btn btn-primary btn-full" onclick="selectDistance('5km')">Chọn cự ly này</button>
@@ -287,8 +326,8 @@
                             <label for="distance-select">Cự ly đăng ký *</label>
                             <select id="distance-select" name="distance" required onchange="updateFee()">
                                 <option value="" disabled selected>Chọn cự ly</option>
-                                <option value="3km" data-fee="150000">3KM (150.000đ)</option>
-                                <option value="5km" data-fee="250000">5KM (250.000đ)</option>
+                                <option value="3km" data-fee="99000">3KM (99.000đ)</option>
+                                <option value="5km" data-fee="149000">5KM (149.000đ)</option>
                             </select>
                             <span class="error-msg" id="error-distance-select"></span>
                         </div>
@@ -296,11 +335,8 @@
                             <label for="size">Size áo *</label>
                             <select id="size" name="size" required>
                                 <option value="" disabled selected>Chọn size áo</option>
-                                <option value="S">Size S</option>
                                 <option value="M">Size M</option>
                                 <option value="L">Size L</option>
-                                <option value="XL">Size XL</option>
-                                <option value="XXL">Size XXL</option>
                             </select>
                             <span class="error-msg" id="error-size"></span>
                         </div>
@@ -352,6 +388,10 @@
                 </div>
                 
                 <div class="payment-info" style="text-align: left; background: #f9fafb; padding: 20px; border-radius: 8px; margin-bottom: 25px;">
+                    <div class="info-row" style="display: flex; justify-content: space-between; margin-bottom: 15px; border-bottom: 1px solid #e5e7eb; padding-bottom: 10px;">
+                        <span class="label" style="color: #6b7280; font-weight: 500;">Cự ly:</span>
+                        <span class="value" id="paymentDistance" style="font-weight: 600; color: var(--navy-main);"></span>
+                    </div>
                     <div class="info-row" style="display: flex; justify-content: space-between; margin-bottom: 15px; border-bottom: 1px solid #e5e7eb; padding-bottom: 10px;">
                         <span class="label" style="color: #6b7280; font-weight: 500;">Ngân hàng:</span>
                         <span class="value" id="paymentBankName" style="font-weight: 600;"></span>
@@ -433,9 +473,11 @@
             <div class="footer-contact">
                 <h4>Liên Hệ</h4>
                 <p>📍 Địa điểm: Sân vận động Ngũ Hành Sơn, Đà Nẵng</p>
-                <p>📧 Email: buocchaynhipsonggg@gmail.com</p>
+                <p>📧 Email: <a href="" id="footerEmail" style="color: var(--white);"></a></p>
+                <p>📞 Hỗ trợ: <a href="" id="footerPhone" style="color: var(--white);"></a></p>
                 <p>📞 Ms. Yến Nhi: +84 327 863 475 (Trưởng BTC)</p>
                 <p>📞 Ms. Đông An: +84 917 445 104 (Phó BTC)</p>
+                <p>🌐 Fanpage: <a href="" id="footerFacebook" target="_blank" style="color: var(--yellow-energy);">Bước Chạy Nhịp Sống</a></p>
             </div>
         </div>
         <div class="footer-bottom">

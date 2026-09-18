@@ -350,8 +350,18 @@
                         <div class="step">03 — GỬI BILL</div>
                     </div>
                     <h2 class="section-title">Thông Tin Đăng Ký</h2>
-                    <form id="registrationForm" onsubmit="handleFormSubmit(event)">
-                        <div class="form-grid">
+                    <div style="position: relative;">
+                        <!-- OVERLAY ĐÓNG ĐĂNG KÝ -->
+                        <div class="registration-closed-overlay">
+                            <div class="closed-card">
+                                <h3>🎉ĐÃ ĐỦ SỐ LƯỢNG ĐĂNG KÝ🎉</h3>
+                                <p>Cảm ơn sự ủng hộ nồng nhiệt của cộng đồng Runner! Hiện tại giải chạy đã đạt giới hạn số lượng người tham gia để đảm bảo chất lượng tổ chức tốt nhất.</p>
+                                <p style="font-size: 0.95rem; margin-top: 15px; color: var(--navy-sub);">Hẹn gặp lại bạn ở những giải chạy tiếp theo của Bước Chạy Nhịp Sống!</p>
+                                <a href="#hero" class="btn btn-primary" style="margin-top: 25px;">Quay Lại Trang Chủ</a>
+                            </div>
+                        </div>
+                        <form id="registrationForm" onsubmit="handleFormSubmit(event)" style="opacity: 0.2; pointer-events: none; user-select: none; filter: blur(2px);">
+                            <div class="form-grid">
                             <div class="form-group">
                                 <label for="fullname">Họ và tên *</label>
                                 <input type="text" id="fullname" name="fullname" placeholder="Nhập họ và tên đầy đủ" required>
@@ -443,6 +453,7 @@
                             </button>
                         </div>
                     </form>
+                    </div>
                 </div>
             </div>
         </section>

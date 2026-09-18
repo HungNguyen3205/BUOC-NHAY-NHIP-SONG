@@ -1815,6 +1815,201 @@ select:focus {
     margin-bottom: 6px;
 }
 
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    transform: scale(1);
+    opacity: 1;
+    will-change: transform, opacity;
+}
+
+.intro-video-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+    background:
+        linear-gradient(
+            90deg,
+            rgba(6, 27, 53, 0.72) 0%,
+            rgba(6, 27, 53, 0.3) 48%,
+            rgba(6, 27, 53, 0.08) 100%
+        ),
+        linear-gradient(
+            180deg,
+            rgba(6, 27, 53, 0.15),
+            rgba(6, 27, 53, 0.48)
+        );
+}
+
+.intro-brand {
+    position: absolute;
+    top: 50%;
+    left: max(6vw, 24px);
+    z-index: 3;
+    max-width: 720px;
+    color: #fff;
+    transform: translateY(-50%);
+    will-change: transform, opacity;
+}
+
+.intro-eyebrow {
+    display: inline-block;
+    margin-bottom: 18px;
+    color: #ffc535;
+    font-size: clamp(0.75rem, 1vw, 0.95rem);
+    font-weight: 800;
+    letter-spacing: 0.18em;
+}
+
+.intro-title {
+    margin: 0;
+    color: #fff;
+    font-family: "Anton", sans-serif;
+    font-size: clamp(4rem, 9vw, 9rem);
+    font-weight: 400;
+    line-height: 0.88;
+    letter-spacing: -0.02em;
+}
+
+.intro-slogan {
+    margin: 24px 0 0;
+    color: rgba(255, 255, 255, 0.88);
+    font-size: clamp(1.15rem, 2vw, 1.8rem);
+    font-weight: 700;
+    font-style: italic;
+}
+
+.intro-scroll {
+    position: absolute;
+    bottom: max(30px, env(safe-area-inset-bottom));
+    left: 50%;
+    z-index: 4;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    color: #fff;
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 0.16em;
+    text-decoration: none;
+    transform: translateX(-50%);
+}
+
+.intro-scroll-icon {
+    width: 2px;
+    height: 42px;
+    background: linear-gradient(
+        to bottom,
+        #ffc535,
+        transparent
+    );
+    animation: introScrollPulse 1.8s ease-in-out infinite;
+}
+
+.intro-skip {
+    position: absolute;
+    top: 28px;
+    right: 28px;
+    z-index: 5;
+    min-height: 44px;
+    padding: 0 18px;
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    border-radius: 999px;
+    color: #fff;
+    font: inherit;
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    cursor: pointer;
+    background: rgba(6, 27, 53, 0.36);
+    backdrop-filter: blur(12px);
+}
+
+@keyframes introScrollPulse {
+    0%,
+    100% {
+        opacity: 0.35;
+        transform: scaleY(0.65);
+        transform-origin: top;
+    }
+    50% {
+        opacity: 1;
+        transform: scaleY(1);
+        transform-origin: top;
+    }
+}
+
+@media (max-width: 768px) {
+    .intro-video-section {
+        height: 170svh;
+    }
+
+    .intro-runner-video {
+        object-position: 62% center;
+    }
+
+    .intro-brand {
+        top: auto;
+        right: 20px;
+        bottom: 105px;
+        left: 20px;
+        max-width: none;
+        transform: none;
+    }
+
+    .intro-title {
+        font-size: clamp(3.4rem, 17vw, 5.6rem);
+        line-height: 0.9;
+    }
+
+    .intro-video-overlay {
+        background:
+            linear-gradient(
+                180deg,
+                rgba(6, 27, 53, 0.08) 20%,
+                rgba(6, 27, 53, 0.8) 100%
+            );
+    }
+
+    .intro-skip {
+        top: max(18px, env(safe-area-inset-top));
+        right: 16px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .intro-video-section {
+        height: 100svh;
+    }
+
+    .intro-runner-video {
+        display: none;
+    }
+
+    .intro-scroll-icon {
+        animation: none;
+    }
+}
+
+/* ==========================================================================
+   EMAIL HINT MODAL
+   ========================================================================== */
+.email-hint {
+    text-align: center;
+    line-height: 1.6;
+    margin-bottom: 25px;
+}
+
+.email-hint-main {
+    color: var(--navy-main);
+    font-size: 14.5px;
+    margin-bottom: 6px;
+}
+
 .email-hint-sub {
     color: #64748b; /* Xám xanh */
     font-size: 13.5px;
@@ -1823,4 +2018,46 @@ select:focus {
 .highlight-spam {
     color: var(--blue-sport);
     font-weight: 700;
+}
+
+/* ==========================================================================
+   REGISTRATION CLOSED OVERLAY
+   ========================================================================== */
+.registration-closed-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.4);
+    border-radius: 12px;
+}
+
+.closed-card {
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid rgba(6, 27, 53, 0.1);
+    box-shadow: 0 30px 80px rgba(6, 27, 53, 0.16), 0 8px 24px rgba(6, 27, 53, 0.08);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 40px;
+    text-align: center;
+    max-width: 500px;
+    width: 90%;
+    animation: tyFadeUp 0.6s ease forwards;
+}
+
+.closed-card h3 {
+    color: var(--blue-sport);
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+    font-family: var(--font-heading);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.closed-card p {
+    color: var(--navy-main);
+    line-height: 1.6;
 }
